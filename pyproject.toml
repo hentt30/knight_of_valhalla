@@ -1,7 +1,8 @@
 [tool.poetry]
-name = "advancing-hero"
+name = "advancing_hero"
 version = "1.0"
-description = "A game for a college project"
+description = "game for a college project"
+authors = ["Henrique <hentt30@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
