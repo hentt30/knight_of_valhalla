@@ -1,6 +1,7 @@
 import pygame
-from advancing_hero.world import World
-from advancing_hero import settings
+from world import World
+from sprites import blocks
+import settings
 
 pygame.init()
 
@@ -11,7 +12,7 @@ screen = pygame.display.set_mode(
 
 pygame.display.set_caption('Advancing Hero')
 
-stage1 = World()
+stage1 = World(blocks, settings)
 
 run = True
 

@@ -1,5 +1,4 @@
 import pygame
-from advancing_hero import settings
 
 
 class Screen():

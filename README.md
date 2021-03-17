@@ -1,8 +1,8 @@
 # ces22-project
-## Instale o projeto
+
+## Instale as dependências
 
 - python setup.py install
-- python setup.py develop
 
 ## Rode o jogo
 
