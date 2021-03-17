@@ -1,75 +1,66 @@
 import pygame
 import pickle
 from os import path
-import os
+import json
 
 pygame.init()
 
 clock = pygame.time.Clock()
-fps = 60
+fps = 30
 
 #game window
-tile_size = 50
-cols = 20
-margin = 100
-screen_width = tile_size * cols
-screen_height = (tile_size * cols) + margin
+tile_size = 64
+screen_cols = 16
+screen_rows = 9
+cols = 16
+rows = 16
+screen_width = tile_size * screen_cols
+screen_height = (tile_size * screen_rows)
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Level Editor')
 
 #load images
-print(path.abspath('../advancing_hero/images/png/rpgTile019.png'))
 grass_img = pygame.image.load(
     path.abspath('../advancing_hero/images/png/rpgTile019.png'))
+
 dirt_img = pygame.image.load(
     path.abspath('../advancing_hero/images/png/rpgTile026.png'))
 water_img = pygame.image.load(
     path.abspath('../advancing_hero/images/png/rpgTile029.png'))
+
 brick_img = pygame.image.load(
     path.abspath('../advancing_hero/images/png/rpgTile061.png'))
+
 asphalt_img = pygame.image.load(
     path.abspath('../advancing_hero/images/png/rpgTile133.png'))
-##big_brush_img = pygame.image.load('img/PNG/rpgTile155.png')
-##small_brush_img = pygame.image.load('img/PNG/rpgTile156.png')
-
-##sun_img = pygame.image.load('img/sun.png')
-##sun_img = pygame.transform.scale(sun_img, (tile_size, tile_size))
-##bg_img = pygame.image.load('img/sky.png')
-##bg_img = pygame.transform.scale(bg_img, (screen_width, screen_height - margin))
-##dirt_img = pygame.image.load('img/dirt.png')
-##grass_img = pygame.image.load('img/grass.png')
-##blob_img = pygame.image.load('img/blob.png')
-##platform_x_img = pygame.image.load('img/platform_x.png')
-##platform_y_img = pygame.image.load('img/platform_y.png')
-##lava_img = pygame.image.load('img/lava.png')
-##coin_img = pygame.image.load('img/coin.png')
-##exit_img = pygame.image.load('img/exit.png')
-##save_img = pygame.image.load('img/save_btn.png')
-##load_img = pygame.image.load('img/load_btn.png')
 
 #define game variables
 clicked = False
-level = 1
+level = 0
 
 #define colours
 white = (255, 255, 255)
 green = (144, 201, 120)
+gray = (197, 194, 197)
 
 font = pygame.font.SysFont('Futura', 24)
 
-#create empty tile list
+## Create world data and try to load existent world
 world_data = []
-for row in range(20):
-    r = [0] * 20
+for row in range(rows):
+    r = [0] * cols
     world_data.append(r)
+## Load existant world
+with open('../advancing_hero/world/world.json') as world_file:
+    existant_world = json.load(world_file)
+for row_index, row in enumerate(existant_world):
+    for col_index, data in enumerate(row):
+        if col_index >= cols or row_index >= rows:
+            raise Exception("Incompatible sizes")
+        world_data[rows - row_index - 1][col_index] = data
 
-#create boundary
-for tile in range(0, 20):
-    world_data[19][tile] = 2
-    world_data[0][tile] = 1
-    world_data[tile][0] = 1
-    world_data[tile][19] = 1
+#print(world_data)
 
 
 #function for outputting text onto the screen
@@ -79,45 +70,50 @@ def draw_text(text, font, text_col, x, y):
 
 
 def draw_grid():
-    for c in range(21):
-        #vertical lines
-        pygame.draw.line(screen, white, (c * tile_size, 0),
-                         (c * tile_size, screen_height - margin))
-        #horizontal lines
-        pygame.draw.line(screen, white, (0, c * tile_size),
-                         (screen_width, c * tile_size))
+    ## drawn horizontal lines
+    for i in range(rows + 2):
+        pygame.draw.line(screen, white, (0, i * tile_size),
+                         (screen_width, i * tile_size))
+    ## drawn vertical lines
+    for i in range(cols + 2):
+        pygame.draw.line(screen, white, (i * tile_size, 0),
+                         (i * tile_size, screen_height))
 
 
 def draw_world():
-    for row in range(20):
-        for col in range(20):
-            if world_data[row][col] > 0:
-                if world_data[row][col] == 1:
+    for row in range(screen_rows):
+        for col in range(screen_cols):
+            if world_data[rows - 1 - row - level][col] > 0:
+                if world_data[rows - 1 - row - level][col] == 1:
                     #dirt blocks
                     img = pygame.transform.scale(grass_img,
                                                  (tile_size, tile_size))
-                    screen.blit(img, (col * tile_size, row * tile_size))
-                if world_data[row][col] == 2:
+                    screen.blit(img, (col * tile_size,
+                                      (screen_rows - 1 - row) * tile_size))
+                if world_data[rows - 1 - row - level][col] == 2:
                     #grass blocks
                     img = pygame.transform.scale(dirt_img,
                                                  (tile_size, tile_size))
-                    screen.blit(img, (col * tile_size, row * tile_size))
-                if world_data[row][col] == 3:
+                    screen.blit(img, (col * tile_size,
+                                      (screen_rows - 1 - row) * tile_size))
+                if world_data[rows - 1 - row - level][col] == 3:
                     #enemy blocks
-                    img = pygame.transform.scale(
-                        water_img, (tile_size, int(tile_size * 0.75)))
-                    screen.blit(img, (col * tile_size, row * tile_size +
-                                      (tile_size * 0.25)))
-                if world_data[row][col] == 4:
+                    img = pygame.transform.scale(water_img,
+                                                 (tile_size, tile_size))
+                    screen.blit(img, (col * tile_size,
+                                      (screen_rows - 1 - row) * tile_size))
+                if world_data[rows - 1 - row - level][col] == 4:
                     #horizontally moving platform
                     img = pygame.transform.scale(brick_img,
-                                                 (tile_size, tile_size // 2))
-                    screen.blit(img, (col * tile_size, row * tile_size))
-                if world_data[row][col] == 5:
+                                                 (tile_size, tile_size))
+                    screen.blit(img, (col * tile_size,
+                                      (screen_rows - 1 - row) * tile_size))
+                if world_data[rows - 1 - row - level][col] == 5:
                     #vertically moving platform
                     img = pygame.transform.scale(asphalt_img,
-                                                 (tile_size, tile_size // 2))
-                    screen.blit(img, (col * tile_size, row * tile_size))
+                                                 (tile_size, tile_size))
+                    screen.blit(img, (col * tile_size,
+                                      (screen_rows - 1 - row) * tile_size))
 
 
 class Button():
@@ -148,10 +144,6 @@ class Button():
         return action
 
 
-#create load and save buttons
-#save_button = Button(screen_width // 2 - 150, screen_height - 80, save_img)
-#load_button = Button(screen_width // 2 + 50, screen_height - 80, load_img)
-
 #main game loop
 run = True
 while run:
@@ -174,6 +166,8 @@ while run:
     for event in pygame.event.get():
         #quit game
         if event.type == pygame.QUIT:
+            with open('world.json', 'w') as outfile:
+                json.dump(world_data, outfile)
             run = False
         #mouseclicks to change tiles
         if event.type == pygame.MOUSEBUTTONDOWN and clicked == False:
@@ -181,27 +175,34 @@ while run:
             pos = pygame.mouse.get_pos()
             x = pos[0] // tile_size
             y = pos[1] // tile_size
+            y = screen_rows - 1 - y
+            y1 = rows - 1 - y - level
+
             #check that the coordinates are within the tile area
-            if x < 20 and y < 20:
+            if x < cols and y1 < rows:
                 #update tile value
                 if pygame.mouse.get_pressed()[0] == 1:
-                    world_data[y][x] += 1
-                    if world_data[y][x] > 8:
-                        world_data[y][x] = 0
+                    world_data[y1][x] += 1
+                    if world_data[y1][x] > 8:
+                        world_data[y1][x] = 0
                 elif pygame.mouse.get_pressed()[2] == 1:
-                    world_data[y][x] -= 1
-                    if world_data[y][x] < 0:
-                        world_data[y][x] = 8
+                    world_data[y1][x] -= 1
+                    if world_data[y1][x] < 0:
+                        world_data[y1][x] = 8
         if event.type == pygame.MOUSEBUTTONUP:
             clicked = False
         #up and down key presses to change level number
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_UP and level <= rows - 1 - screen_rows:
                 level += 1
-            elif event.key == pygame.K_DOWN and level > 1:
+            elif event.key == pygame.K_DOWN and level > 0:
                 level -= 1
 
+            #print(level)
+
+    ## update scrollbar
     #update game display window
+
     pygame.display.update()
 
 pygame.quit()
