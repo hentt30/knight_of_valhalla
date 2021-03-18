@@ -11,7 +11,7 @@ class Sprite(pygame.sprite.Sprite):
     General class that represents a sprite. All the classes
     have to inherit from this class
     """
-    def __init__(self, path: str, position):
+    def __init__(self, path: str, position, max_health: float = 100):
         super().__init__()
         self.image_list = []
         self.image_frame = 0
@@ -24,6 +24,9 @@ class Sprite(pygame.sprite.Sprite):
         self.rect.x = position[0]
         self.rect.y = position[1]
         self.frame_counter = 0
+
+        self.max_health = max_health
+        self.current_health = max_health
 
     def update(self):
         self.frame_counter += 1

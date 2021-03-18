@@ -17,8 +17,14 @@ pygame.display.set_caption('Advancing Hero')
 stage1 = World(blocks, settings)
 
 all_enemies = pygame.sprite.Group()
-S1 = SpriteTest((512, 288))
+all_healthbars = pygame.sprite.Group()
+
+S1 = SpriteTest(position=(512, 288), healthbars=all_healthbars, max_health=66)
+S2 = SpriteTest(position=(256, 288), healthbars=all_healthbars, max_health=33)
+S3 = SpriteTest(position=(512+256, 288), healthbars=all_healthbars, max_health=100)
 all_enemies.add(S1)
+all_enemies.add(S2)
+all_enemies.add(S3)
 
 run = True
 
@@ -33,8 +39,10 @@ while run:
     all_enemies.update()
     all_enemies.draw(screen)
 
-    pygame.display.update()
+    all_healthbars.update()
+    all_healthbars.draw(screen)
 
+    pygame.display.update()
 
 
 pygame.quit()
