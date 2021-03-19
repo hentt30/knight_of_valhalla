@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "advancing_hero"
+version = "1.0"
+description = "game for a college project"
+authors = ["Henrique <hentt30@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools"]
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist =  py{36,37,38}
+[testenv]
+commands=
+    pytest
+"""
