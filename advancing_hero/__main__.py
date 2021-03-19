@@ -1,8 +1,8 @@
 import pygame
 
-from advancing_hero.sprites.sprites.sprite_test import SpriteTest
+from data.sprites import SpriteTest
 from world import World
-from sprites import blocks
+from data import blocks
 import settings
 
 pygame.init()
@@ -21,7 +21,9 @@ all_healthbars = pygame.sprite.Group()
 
 S1 = SpriteTest(position=(512, 288), healthbars=all_healthbars, max_health=66)
 S2 = SpriteTest(position=(256, 288), healthbars=all_healthbars, max_health=33)
-S3 = SpriteTest(position=(512+256, 288), healthbars=all_healthbars, max_health=100)
+S3 = SpriteTest(position=(512 + 256, 288),
+                healthbars=all_healthbars,
+                max_health=100)
 all_enemies.add(S1)
 all_enemies.add(S2)
 all_enemies.add(S3)
@@ -43,6 +45,5 @@ while run:
     all_healthbars.draw(screen)
 
     pygame.display.update()
-
 
 pygame.quit()

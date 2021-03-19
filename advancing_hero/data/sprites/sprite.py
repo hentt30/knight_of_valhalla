@@ -17,7 +17,8 @@ class Sprite(pygame.sprite.Sprite):
         self.image_frame = 0
         for file in os.listdir(path):
             if file.endswith(".png"):
-                self.image_list.append(pygame.image.load(path+'\\'+file))
+                self.image_list.append(
+                    pygame.image.load(os.path.join(path, file)))
         self.image = self.image_list[0]
         self.surf = pygame.Surface((settings.tile_size, settings.tile_size))
         self.rect = self.surf.get_rect()
