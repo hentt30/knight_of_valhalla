@@ -3,17 +3,18 @@ Class that defines the World
 """
 import json
 import pygame
+from ..sprites import blocks
 
 
-class World():
+class World:
     """
-    Defines the state of the world in wich
+    Defines the state of the world in which
     our hero walks
     """
-    def __init__(self, blocks: any, settings) -> None:
+    def __init__(self, settings, level_data) -> None:
         self.tile_list = []
         self.settings = settings
-        with open('advancing_hero/world/world.json') as world_file:
+        with open(level_data) as world_file:
             self.stage_data = json.load(world_file)
         self.blocks = {
             1: blocks.Grass,
@@ -23,7 +24,7 @@ class World():
             5: blocks.Asphalt
         }
 
-        #Converting Stage Data to blocks
+        # Converting Stage Data to blocks
         for row_index, row_element in enumerate(self.stage_data):
             for column_index, tile in enumerate(row_element):
                 block = self.blocks[tile](settings=self.settings)

@@ -1,48 +1,43 @@
 import pygame
 
-from advancing_hero.sprites.sprites.sprite_test import SpriteTest
-from world import World
-from sprites import blocks
 import settings
+import gamemodes
 
 pygame.init()
 
 clock = pygame.time.Clock()
+global current_gamemode
+global game_admin
 
 screen = pygame.display.set_mode(
     (settings.screen_width, settings.screen_height))
 
-pygame.display.set_caption('Advancing Hero')
+pygame.display.set_caption('Knight of Valhalla')
 
-stage1 = World(blocks, settings)
-
-all_enemies = pygame.sprite.Group()
-all_healthbars = pygame.sprite.Group()
-
-S1 = SpriteTest(position=(512, 288), healthbars=all_healthbars, max_health=66)
-S2 = SpriteTest(position=(256, 288), healthbars=all_healthbars, max_health=33)
-S3 = SpriteTest(position=(512+256, 288), healthbars=all_healthbars, max_health=100)
-all_enemies.add(S1)
-all_enemies.add(S2)
-all_enemies.add(S3)
+pygame.event.post(pygame.event.Event(pygame.USEREVENT, customType='title_screen'))
 
 run = True
 
 while run:
+    events = pygame.event.get()
 
-    for event in pygame.event.get():
+    for event in events:
         if event.type == pygame.QUIT:
             run = False
+        elif event.type == pygame.USEREVENT:
+            if event.customType == 'init_level':
+                current_gamemode = gamemodes.modes['level_main']
+                game_admin = current_gamemode(screen, event.level, settings)
+                print('level_init')
+            if event.customType == 'title_screen':
+                current_gamemode = gamemodes.modes['title_screen']
+                game_admin = current_gamemode(screen, settings)
 
-    stage1.draw(screen)
-
-    all_enemies.update()
-    all_enemies.draw(screen)
-
-    all_healthbars.update()
-    all_healthbars.draw(screen)
+    game_admin.loop(events)
 
     pygame.display.update()
+
+    clock.tick(settings.FPS)
 
 
 pygame.quit()
