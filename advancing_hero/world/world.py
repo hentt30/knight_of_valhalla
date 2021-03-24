@@ -15,6 +15,8 @@ class World():
         self.settings = settings
         with open('advancing_hero/world/world.json') as world_file:
             self.stage_data = json.load(world_file)
+        self.stage_data.reverse()
+
         self.blocks = {
             1: blocks.Grass,
             2: blocks.Dirt,
@@ -22,14 +24,30 @@ class World():
             4: blocks.Brick,
             5: blocks.Asphalt
         }
+        self.true_scroll = 0.0
 
-        #Converting Stage Data to blocks
         for row_index, row_element in enumerate(self.stage_data):
             for column_index, tile in enumerate(row_element):
                 block = self.blocks[tile](settings=self.settings)
                 self.tile_list = block.add_block_to_stage(
-                    self.tile_list, column_index, row_index)
+                    self.tile_list, column_index,
+                    self.settings.SCREEN_ROWS - row_index)
 
-    def draw(self, screen) -> None:
+    def draw(self, screen: any) -> None:
+        """
+        Draw the world accorfing to the player position
+
+            Args:
+
+                screen: pygame screen
+        """
+        if self.true_scroll <= (len(self.stage_data) -
+                                self.settings.SCREEN_ROWS -
+                                1) * self.settings.tile_size:
+            self.true_scroll += self.settings.WORLD_SPEED
+        scroll = int(self.true_scroll)
+
         for tile in self.tile_list:
-            screen.blit(tile[0], tile[1])
+            position = tile[1].copy()
+            position.y += scroll
+            screen.blit(tile[0], position)
