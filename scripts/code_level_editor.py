@@ -13,7 +13,7 @@ tile_size = 64
 screen_cols = 16
 screen_rows = 9
 cols = 16
-rows = 16
+rows = 46
 screen_width = tile_size * screen_cols
 screen_height = (tile_size * screen_rows)
 

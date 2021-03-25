@@ -1,8 +1,7 @@
 import pygame
 
-from data.sprites import SpriteTest
-from world import World
-from data import blocks
+from sprites import SpriteTest
+from world import World, blocks
 import settings
 
 pygame.init()
