@@ -31,7 +31,7 @@ class World():
                 block = self.blocks[tile](settings=self.settings)
                 self.tile_list = block.add_block_to_stage(
                     self.tile_list, column_index,
-                    self.settings.SCREEN_ROWS - row_index)
+                    self.settings.SCREEN_ROWS - 1 - row_index)
 
     def draw(self, screen: any) -> None:
         """
