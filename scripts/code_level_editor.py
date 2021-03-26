@@ -54,6 +54,8 @@ for row in range(rows):
 ## Load existant world
 with open('../advancing_hero/world/world.json') as world_file:
     existant_world = json.load(world_file)
+
+existant_world.reverse()
 for row_index, row in enumerate(existant_world):
     for col_index, data in enumerate(row):
         if col_index >= cols or row_index >= rows:
