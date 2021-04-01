@@ -1,7 +1,5 @@
 import pygame
 
-from sprites import SpriteTest
-from world import World, blocks
 import settings
 import gamemodes
 
@@ -14,7 +12,7 @@ global game_admin
 screen = pygame.display.set_mode(
     (settings.screen_width, settings.screen_height))
 
-pygame.display.set_caption('Knight of Valhalla')
+pygame.display.set_caption(settings.TITLE)
 
 pygame.event.post(pygame.event.Event(pygame.USEREVENT, customType='title_screen'))
 

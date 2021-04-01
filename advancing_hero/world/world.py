@@ -3,7 +3,7 @@ Class that defines the World
 """
 import json
 import pygame
-from ..sprites import blocks
+from . import blocks
 
 
 class World:
@@ -52,3 +52,4 @@ class World:
             position = tile[1].copy()
             position.y += scroll
             screen.blit(tile[0], position)
+            pygame.draw.rect(screen, (255, 255, 255), tile[1], 2)

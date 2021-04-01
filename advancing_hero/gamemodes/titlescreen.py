@@ -1,6 +1,4 @@
 from .gamemode import GameMode
-from advancing_hero.world import world
-from advancing_hero.sprites import sprites
 import pygame
 import pygame.freetype
 import os
