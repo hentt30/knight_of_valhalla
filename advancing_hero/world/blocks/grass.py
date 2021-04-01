@@ -14,4 +14,4 @@ class Grass(Block):
         settings,
         path: str = 'advancing_hero/images/png/rpgTile019.png',
     ) -> None:
-        super().__init__(os.path.abspath(path), settings)
+        super().__init__(os.path.abspath(path), settings, settings.GRASS)

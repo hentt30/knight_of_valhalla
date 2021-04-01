@@ -4,7 +4,21 @@ SCREEN_COLUMNS = 16
 SIZE = screen_width, screen_height = 64 * 16, 64 * 9
 FPS = 60
 tile_size = 64
+
+## Speeds
 WORLD_SPEED = 1
+DEFAULT_PLAYER_SPEED = 5
+ASPHALT_SPEED = 5 * 1
+GRASS_SPEED = 5 * 0.8
+DIRT_SPEED = 5 * 0.6
+WATER_SPEED = 5 * 0.3
+
+## Block names
+ASPHALT = 'black_rock'
+BRICK = 'gray_rock'
+GRASS = 'grass'
+DIRT = 'sand'
+WATER = 'water'
 
 level_1 = 'advancing_hero/world/world.json'
 

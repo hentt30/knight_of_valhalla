@@ -4,7 +4,6 @@ import pygame
 import math
 from enum import Enum
 
-
 #DOWN = 1
 #SIDE = 4
 #UP = 7
@@ -23,8 +22,10 @@ class Player(Sprite):
         max_health: float = 100,
         path: str = 'advancing_hero/images/sprites/player/',
     ) -> None:
-        super().__init__(path=os.path.abspath(path), position=position, max_health=max_health)
-        self.speed = 5
+        super().__init__(path=os.path.abspath(path),
+                         position=position,
+                         max_health=max_health)
+        self.speed = settings.DEFAULT_PLAYER_SPEED
         self.screen = screen
         self.settings = settings
         self.stage = stage
@@ -82,21 +83,38 @@ class Player(Sprite):
 
         for tile in self.stage.tile_list:
             # Check only blocks which are on screen and are interactable
-            if tile[1].bottom > 0 and tile[1].top < self.settings.screen_height and tile[2].is_interactable:
+            if tile[1].bottom > 0 and tile[
+                    1].top < self.settings.screen_height and tile[
+                        2].is_interactable:
                 # Check if it's solid:
                 if tile[2].is_solid and (dx or dy):
                     # Check collision in x direction
-                    delta_x = self.speed * dx / math.sqrt(dx*dx+dy*dy)
-                    delta_y = self.speed * dy / math.sqrt(dx*dx+dy*dy)
-                    if tile[1].colliderect(self.rect.x+delta_x, self.rect.y, self.rect.width, self.rect.height):
+                    delta_x = self.speed * dx / math.sqrt(dx * dx + dy * dy)
+                    delta_y = self.speed * dy / math.sqrt(dx * dx + dy * dy)
+                    if tile[1].colliderect(self.rect.x + delta_x, self.rect.y,
+                                           self.rect.width, self.rect.height):
                         dx = 0
                     # Check for collision in y direction
-                    if tile[1].colliderect(self.rect.x, self.rect.y+delta_y, self.rect.width, self.rect.height):
+                    if tile[1].colliderect(self.rect.x, self.rect.y + delta_y,
+                                           self.rect.width, self.rect.height):
                         dy = 0
+            elif tile[1].bottom > 0 and tile[
+                    1].top < self.settings.screen_height and (dx or dy):
+                delta_y = self.speed * dy / math.sqrt(dx * dx + dy * dy)
+                if tile[1].collidepoint(
+                        self.rect.x, self.rect.y + delta_y + self.rect.height):
+                    if tile[2].name == self.settings.GRASS:
+                        self.speed = self.settings.GRASS_SPEED
+                    if tile[2].name == self.settings.ASPHALT:
+                        self.speed = self.settings.ASPHALT_SPEED
+                    if tile[2].name == self.settings.DIRT:
+                        self.speed = self.settings.DIRT_SPEED
+                    if tile[2].name == self.settings.WATER:
+                        self.speed = self.settings.WATER_SPEED
 
         if dx or dy:
-            self.rect.x += self.speed * dx / math.sqrt(dx*dx+dy*dy)
-            self.rect.y += self.speed * dy / math.sqrt(dx*dx+dy*dy)
+            self.rect.x += self.speed * dx / math.sqrt(dx * dx + dy * dy)
+            self.rect.y += self.speed * dy / math.sqrt(dx * dx + dy * dy)
 
         if self.rect.bottom > self.settings.screen_height:
             self.rect.bottom = self.settings.screen_height
@@ -113,14 +131,21 @@ class Player(Sprite):
             self.rect.bottom = self.settings.screen_height
             for tile in self.stage.tile_list:
                 # Check only blocks which are on screen and are interactable
-                if tile[1].bottom > 0 and tile[1].top < self.settings.screen_height and tile[2].is_interactable:
+                if tile[1].bottom > 0 and tile[
+                        1].top < self.settings.screen_height and tile[
+                            2].is_interactable:
                     # Check if it's solid:
                     if tile[2].is_solid:
                         # Player is scrolled before the blocks, so we check collision with block's rect
                         # + scroll, or, equivalently, player - scroll, now that we have already fixed player's position
                         # in case he was next to screen's bottom.
-                        if tile[1].colliderect(self.rect.x, self.rect.y-scroll, self.rect.width, self.rect.height):
-                            pygame.event.post(pygame.event.Event(pygame.USEREVENT, customType='title_screen'))
+                        if tile[1].colliderect(self.rect.x,
+                                               self.rect.y - scroll,
+                                               self.rect.width,
+                                               self.rect.height):
+                            pygame.event.post(
+                                pygame.event.Event(pygame.USEREVENT,
+                                                   customType='end_game'))
 
     def draw(self):
         self.screen.blit(self.image, self.rect)
@@ -128,13 +153,13 @@ class Player(Sprite):
 
     def walk_animation(self, still_frame, direction, flip=False):
         if self.walking_framerate == 0:
-            self.image_frame = still_frame-1
+            self.image_frame = still_frame - 1
             self.update_rect(flip)
         elif self.walking_framerate == 15 or self.walking_framerate == 45:
             self.image_frame = still_frame
             self.update_rect(flip)
         elif self.walking_framerate == 30:
-            self.image_frame = still_frame+1
+            self.image_frame = still_frame + 1
             self.update_rect(flip)
         self.moving_direction = direction
         self.walking_framerate = (self.walking_framerate + 1) % 60

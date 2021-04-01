@@ -13,7 +13,7 @@ tile_size = 64
 screen_cols = 16
 screen_rows = 9
 cols = 16
-rows = 46
+rows = 18
 screen_width = tile_size * screen_cols
 screen_height = (tile_size * screen_rows)
 
@@ -58,9 +58,8 @@ with open('../advancing_hero/world/world.json') as world_file:
 existant_world.reverse()
 for row_index, row in enumerate(existant_world):
     for col_index, data in enumerate(row):
-        if col_index >= cols or row_index >= rows:
-            raise Exception("Incompatible sizes")
-        world_data[rows - row_index - 1][col_index] = data
+        if col_index < cols and row_index < rows:
+            world_data[rows - row_index - 1][col_index] = data
 
 #print(world_data)
 

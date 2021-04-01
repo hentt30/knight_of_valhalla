@@ -14,4 +14,4 @@ class Dirt(Block):
         settings: any,
         path: str = 'advancing_hero/images/png/rpgTile026.png',
     ) -> None:
-        super().__init__(os.path.abspath(path), settings)
+        super().__init__(os.path.abspath(path), settings, settings.DIRT)

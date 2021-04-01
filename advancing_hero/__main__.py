@@ -14,7 +14,8 @@ screen = pygame.display.set_mode(
 
 pygame.display.set_caption(settings.TITLE)
 
-pygame.event.post(pygame.event.Event(pygame.USEREVENT, customType='title_screen'))
+pygame.event.post(
+    pygame.event.Event(pygame.USEREVENT, customType='title_screen'))
 
 run = True
 
@@ -28,9 +29,11 @@ while run:
             if event.customType == 'init_level':
                 current_gamemode = gamemodes.modes['level_main']
                 game_admin = current_gamemode(screen, event.level, settings)
-                print('level_init')
             if event.customType == 'title_screen':
                 current_gamemode = gamemodes.modes['title_screen']
+                game_admin = current_gamemode(screen, settings)
+            if event.customType == 'end_game':
+                current_gamemode = gamemodes.modes['end_game']
                 game_admin = current_gamemode(screen, settings)
 
     game_admin.loop(events)
@@ -38,6 +41,5 @@ while run:
     pygame.display.update()
 
     clock.tick(settings.FPS)
-
 
 pygame.quit()
