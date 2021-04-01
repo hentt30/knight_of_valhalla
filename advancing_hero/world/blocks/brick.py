@@ -14,4 +14,4 @@ class Brick(Block):
         settings: any,
         path: str = 'advancing_hero/images/png/rpgTile061.png',
     ) -> None:
-        super().__init__(os.path.abspath(path), settings)
+        super().__init__(os.path.abspath(path), settings, is_solid=True, interactable=True)

@@ -19,11 +19,13 @@ class Player(Sprite):
         position,
         settings,
         stage,
+        screen,
         max_health: float = 100,
         path: str = 'advancing_hero/images/sprites/player/',
     ) -> None:
         super().__init__(path=os.path.abspath(path), position=position, max_health=max_health)
         self.speed = 5
+        self.screen = screen
         self.settings = settings
         self.stage = stage
         self.image_frame = 1
@@ -38,7 +40,7 @@ class Player(Sprite):
     def handle_movement(self):
         dx = 0
         dy = 0
-        moving_flag = False # Handles multiple key presses
+        moving_flag = False  # Handles multiple key presses
         key = pygame.key.get_pressed()
         if key[pygame.K_w]:
             self.walk_animation(7, 1)
@@ -57,27 +59,40 @@ class Player(Sprite):
         if key[pygame.K_d]:
             if not moving_flag:
                 self.walk_animation(4, 4, flip=True)
-            moving_flag = True
             dx += 1
 
         if dx == 0 and dy == 0:
             self.walking_framerate = 0
             # If we were walking and stopped, keep last looking to
             # the direction we were looking before
-            if (self.moving_direction == 1):
+            if self.moving_direction == 1:
                 self.image_frame = 7
                 self.update_rect()
-            if (self.moving_direction == 2):
+            if self.moving_direction == 2:
                 self.image_frame = 4
                 self.update_rect()
-            if (self.moving_direction == 3):
+            if self.moving_direction == 3:
                 self.image_frame = 1
                 self.update_rect()
-            if (self.moving_direction == 4):
+            if self.moving_direction == 4:
                 self.image_frame = 4
                 self.update_rect(flip=True)
 
             self.moving_direction = 0
+
+        for tile in self.stage.tile_list:
+            # Check only blocks which are on screen and are interactable
+            if tile[1].bottom > 0 and tile[1].top < self.settings.screen_height and tile[2].is_interactable:
+                # Check if it's solid:
+                if tile[2].is_solid and (dx or dy):
+                    # Check collision in x direction
+                    delta_x = self.speed * dx / math.sqrt(dx*dx+dy*dy)
+                    delta_y = self.speed * dy / math.sqrt(dx*dx+dy*dy)
+                    if tile[1].colliderect(self.rect.x+delta_x, self.rect.y, self.rect.width, self.rect.height):
+                        dx = 0
+                    # Check for collision in y direction
+                    if tile[1].colliderect(self.rect.x, self.rect.y+delta_y, self.rect.width, self.rect.height):
+                        dy = 0
 
         if dx or dy:
             self.rect.x += self.speed * dx / math.sqrt(dx*dx+dy*dy)
@@ -92,9 +107,9 @@ class Player(Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
 
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
-        pygame.draw.rect(screen, (255, 0, 0), self.rect, 2)
+    def draw(self):
+        self.screen.blit(self.image, self.rect)
+        pygame.draw.rect(self.screen, (255, 0, 0), self.rect, 2)
 
     def walk_animation(self, still_frame, direction, flip=False):
         if self.walking_framerate == 0:

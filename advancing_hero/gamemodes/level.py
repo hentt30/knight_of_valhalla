@@ -15,13 +15,13 @@ class LevelGameMode(GameMode):
         S1 = SpriteTest(position=(512, 288), healthbars=self.all_healthbars, max_health=66)
         S2 = SpriteTest(position=(256, 288), healthbars=self.all_healthbars, max_health=33)
         S3 = SpriteTest(position=(512 + 256, 288), healthbars=self.all_healthbars, max_health=100)
-        self.player = Player((512, 288), settings, self.stage)
+        self.player = Player((512, 288), settings, self.stage, self.screen)
         self.all_enemies.add(S1)
         self.all_enemies.add(S2)
         self.all_enemies.add(S3)
 
     def loop(self, events):
-        self.stage.draw(self.screen)
+        self.stage.update(self.screen)
 
         self.all_enemies.update()
         self.all_enemies.draw(self.screen)
@@ -30,4 +30,4 @@ class LevelGameMode(GameMode):
         self.all_healthbars.draw(self.screen)
 
         self.player.update()
-        self.player.draw(self.screen)
+        self.player.draw()

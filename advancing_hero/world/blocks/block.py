@@ -10,13 +10,15 @@ class Block:
     General class that represents a block. All the classes
     have to inherit from this class
     """
-    def __init__(self, path: str, settings: any) -> None:
+    def __init__(self, path: str, settings: any, is_solid=False, interactable=False) -> None:
         """
         Loads the image
         """
         self.settings = settings
         self.velocity_modifier = 0
         self.damage_to_hero = 0
+        self.is_solid = is_solid
+        self.is_interactable = interactable
         loaded_image = pygame.image.load(path)
         self.image_scaled = pygame.transform.scale(
             loaded_image, (self.settings.tile_size, self.settings.tile_size))
@@ -35,6 +37,6 @@ class Block:
         """
         self.image_rectangle.x = column * self.settings.tile_size
         self.image_rectangle.y = row * self.settings.tile_size
-        tile = (self.image_scaled, self.image_rectangle)
+        tile = (self.image_scaled, self.image_rectangle, self)
         tile_list.append(tile)
         return tile_list

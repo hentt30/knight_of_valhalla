@@ -27,14 +27,16 @@ class World:
         }
         self.true_scroll = 0.0
 
+        self.frame_counter = 0
+
         for row_index, row_element in enumerate(self.stage_data):
             for column_index, tile in enumerate(row_element):
                 block = self.blocks[tile](settings=self.settings)
-                self.tile_list = block.add_block_to_stage(
+                block.add_block_to_stage(
                     self.tile_list, column_index,
                     self.settings.SCREEN_ROWS - 1 - row_index)
 
-    def draw(self, screen: any) -> None:
+    def update(self, screen: any) -> None:
         """
         Draw the world accorfing to the player position
 
@@ -42,14 +44,18 @@ class World:
 
                 screen: pygame screen
         """
-        if self.true_scroll <= (len(self.stage_data) -
-                                self.settings.SCREEN_ROWS -
-                                1) * self.settings.tile_size:
-            self.true_scroll += self.settings.WORLD_SPEED
-        scroll = int(self.true_scroll)
+        if self.frame_counter % 2 == 0:
+            prev_scroll = self.true_scroll
+            if self.true_scroll <= (len(self.stage_data) -
+                                    self.settings.SCREEN_ROWS -
+                                    1) * self.settings.tile_size:
+                self.true_scroll += self.settings.WORLD_SPEED
+            scroll = int(self.true_scroll)
 
         for tile in self.tile_list:
-            position = tile[1].copy()
-            position.y += scroll
-            screen.blit(tile[0], position)
+            if self.frame_counter % 2 == 0:
+                tile[1].y+= scroll-prev_scroll
+            screen.blit(tile[0], tile[1])
             pygame.draw.rect(screen, (255, 255, 255), tile[1], 2)
+
+        self.frame_counter += 1
