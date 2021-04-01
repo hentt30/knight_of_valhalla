@@ -14,4 +14,4 @@ class Water(Block):
         settings: any,
         path: str = 'advancing_hero/images/png/rpgTile029.png',
     ):
-        super().__init__(os.path.abspath(path), settings)
+        super().__init__(os.path.abspath(path), settings, settings.WATER)

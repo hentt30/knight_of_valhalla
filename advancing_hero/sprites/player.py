@@ -25,7 +25,7 @@ class Player(Sprite):
         super().__init__(path=os.path.abspath(path),
                          position=position,
                          max_health=max_health)
-        self.speed = 5
+        self.speed = settings.DEFAULT_PLAYER_SPEED
         self.screen = screen
         self.settings = settings
         self.stage = stage
@@ -98,6 +98,19 @@ class Player(Sprite):
                     if tile[1].colliderect(self.rect.x, self.rect.y + delta_y,
                                            self.rect.width, self.rect.height):
                         dy = 0
+            elif tile[1].bottom > 0 and tile[
+                    1].top < self.settings.screen_height and (dx or dy):
+                delta_y = self.speed * dy / math.sqrt(dx * dx + dy * dy)
+                if tile[1].collidepoint(
+                        self.rect.x, self.rect.y + delta_y + self.rect.height):
+                    if tile[2].name == self.settings.GRASS:
+                        self.speed = self.settings.GRASS_SPEED
+                    if tile[2].name == self.settings.ASPHALT:
+                        self.speed = self.settings.ASPHALT_SPEED
+                    if tile[2].name == self.settings.DIRT:
+                        self.speed = self.settings.DIRT_SPEED
+                    if tile[2].name == self.settings.WATER:
+                        self.speed = self.settings.WATER_SPEED
 
         if dx or dy:
             self.rect.x += self.speed * dx / math.sqrt(dx * dx + dy * dy)

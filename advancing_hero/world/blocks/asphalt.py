@@ -14,4 +14,4 @@ class Asphalt(Block):
         settings: any,
         path: str = 'advancing_hero/images/png/rpgTile133.png',
     ) -> None:
-        super().__init__(os.path.abspath(path), settings)
+        super().__init__(os.path.abspath(path), settings, settings.ASPHALT)
