@@ -23,7 +23,7 @@ class Block:
         self.image_rectangle = self.image_scaled.get_rect()
 
     def add_block_to_stage(self, tile_list: list, column: int,
-                           row: int) -> None:
+                           row: int):
         """
         Add blocks to the world
 
