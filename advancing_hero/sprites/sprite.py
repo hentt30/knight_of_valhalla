@@ -15,7 +15,10 @@ class Sprite(pygame.sprite.Sprite):
         super().__init__()
         self.image_list = []
         self.image_frame = 0
-        for file in os.listdir(path):
+
+        image_files = os.listdir(path)
+        image_files.sort()
+        for file in image_files:
             if file.endswith(".png"):
                 self.image_list.append(
                     pygame.image.load(os.path.join(path, file)))
@@ -31,4 +34,3 @@ class Sprite(pygame.sprite.Sprite):
 
     def update(self, *args, **kwargs):
         self.frame_counter += 1
-
