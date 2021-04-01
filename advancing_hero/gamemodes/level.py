@@ -21,7 +21,7 @@ class LevelGameMode(GameMode):
         self.all_enemies.add(S3)
 
     def loop(self, events):
-        self.stage.update(self.screen)
+        self.stage.update(self.screen, self.player)
 
         self.all_enemies.update()
         self.all_enemies.draw(self.screen)

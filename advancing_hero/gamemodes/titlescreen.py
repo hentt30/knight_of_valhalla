@@ -38,9 +38,9 @@ class TitleScreen(GameMode):
                           self.settings.screen_height / 2 - 10 + self.icon_position * 50))
         for event in events:
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_DOWN:
+                if event.key == pygame.K_w:
                     self.icon_position = (self.icon_position + 1) % 2
-                if event.key == pygame.K_UP:
+                if event.key == pygame.K_s:
                     self.icon_position = (self.icon_position - 1) % 2
                 if event.key == pygame.K_SPACE:
                     if self.icon_position == 1:

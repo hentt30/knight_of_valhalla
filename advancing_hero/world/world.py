@@ -36,7 +36,7 @@ class World:
                     self.tile_list, column_index,
                     self.settings.SCREEN_ROWS - 1 - row_index)
 
-    def update(self, screen: any) -> None:
+    def update(self, screen: any, player) -> None:
         """
         Draw the world accorfing to the player position
 
@@ -44,6 +44,7 @@ class World:
 
                 screen: pygame screen
         """
+        scroll = prev_scroll = 0
         if self.frame_counter % 2 == 0:
             prev_scroll = self.true_scroll
             if self.true_scroll <= (len(self.stage_data) -
@@ -51,10 +52,11 @@ class World:
                                     1) * self.settings.tile_size:
                 self.true_scroll += self.settings.WORLD_SPEED
             scroll = int(self.true_scroll)
+            player.auto_scroll_down(scroll-prev_scroll)
 
         for tile in self.tile_list:
             if self.frame_counter % 2 == 0:
-                tile[1].y+= scroll-prev_scroll
+                tile[1].y += scroll-prev_scroll
             screen.blit(tile[0], tile[1])
             pygame.draw.rect(screen, (255, 255, 255), tile[1], 2)
 
