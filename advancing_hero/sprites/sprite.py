@@ -23,10 +23,9 @@ class Sprite(pygame.sprite.Sprite):
                 self.image_list.append(
                     pygame.image.load(os.path.join(path, file)))
         self.image = self.image_list[0]
-        self.surf = pygame.Surface((settings.tile_size, settings.tile_size))
-        self.rect = self.surf.get_rect()
-        self.rect.x = position[0]
-        self.rect.y = position[1]
+        self.rect = self.image.get_rect()
+        self.rect.centerx = position[0]
+        self.rect.centery = position[1]
         self.frame_counter = 0
 
         self.max_health = max_health
@@ -34,3 +33,6 @@ class Sprite(pygame.sprite.Sprite):
 
     def update(self, *args, **kwargs):
         self.frame_counter += 1
+
+    def hurt(self, *args, **kwargs):
+        pass

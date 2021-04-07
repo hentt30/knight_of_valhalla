@@ -39,7 +39,7 @@ class Player(Sprite):
         self.update_rect()
         self.walking_framerate = 0
         self.moving_direction = 3
-        self.current_weapon = 'arrow'
+        self.current_weapon = 'boomerang'
         self.weapon = weapons[self.current_weapon]
         self.attack_cooldown = 0
         self.projectiles = pygame.sprite.Group()
@@ -49,7 +49,7 @@ class Player(Sprite):
 
         self.handle_movement()
         self.handle_weapon()
-        self.projectiles.update()
+        self.projectiles.update(self.stage)
         self.projectiles.draw(self.screen)
 
         if self.attack_cooldown > 0:
@@ -71,7 +71,7 @@ class Player(Sprite):
                     else:
                         direction = pygame.Vector2((1, 0))
 
-                    self.weapon = weapons[self.current_weapon]((self.rect.x, self.rect.y), direction, self)
+                    self.weapon = weapons[self.current_weapon]((self.rect.centerx, self.rect.centery), direction, self)
                     self.projectiles.add(self.weapon)
 
             if self.current_weapon == 'arrow' and self.attack_cooldown == 0 and len(self.projectiles.sprites()) < 3:
@@ -94,15 +94,15 @@ class Player(Sprite):
                 self.walk_animation(4, 2)
             moving_flag = True
             dx -= 1
-        if key[pygame.K_s]:
-            if not moving_flag:
-                self.walk_animation(1, 3)
-            moving_flag = True
-            dy += 1
         if key[pygame.K_d]:
             if not moving_flag:
                 self.walk_animation(4, 4, flip=True)
             dx += 1
+            moving_flag = True
+        if key[pygame.K_s]:
+            if not moving_flag:
+                self.walk_animation(1, 3)
+            dy += 1
 
         if dx == 0 and dy == 0:
             self.walking_framerate = 0

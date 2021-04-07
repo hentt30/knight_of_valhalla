@@ -34,11 +34,20 @@ class Arrow(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = temp_rect.x
         self.rect.y = temp_rect.y
+        self.damage = 20
 
-    def update(self):
+    def update(self, stage):
         super().update()
         self.rect.x += self.speed.x
         self.rect.y += self.speed.y
 
+        self.hurt_enemies(stage)
+
         if not self.rect.colliderect(pygame.Rect(0, 0, self.settings.screen_width, self.settings.screen_height)):
             self.kill()
+
+    def hurt_enemies(self, stage):
+        for enemy in stage.all_enemies.sprites():
+            if self.rect.colliderect(enemy.rect):
+                enemy.hurt(self.damage)
+                self.kill()

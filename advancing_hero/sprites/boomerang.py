@@ -27,9 +27,11 @@ class Boomerang(Sprite):
         self.acceleration = 0.2
         self.player = player
         self.state = 0
+        self.damage = 2.5
 
-    def update(self):
+    def update(self, stage):
         super().update()
+        self.hurt_enemies(stage)
         if self.frame_counter % self.animation_framerate == 0:
             self.image_frame = (self.image_frame + 1) % len(self.image_list)
             self.image = self.image_list[self.image_frame]
@@ -55,3 +57,8 @@ class Boomerang(Sprite):
             self.speed += self.acceleration
             if self.rect.colliderect(self.player.rect):
                 self.kill()
+
+    def hurt_enemies(self, stage):
+        for enemy in stage.all_enemies.sprites():
+            if self.rect.colliderect(enemy.rect):
+                enemy.hurt(self.damage)
