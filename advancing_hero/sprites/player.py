@@ -1,12 +1,16 @@
 import os
 from .sprite import Sprite
+from .boomerang import Boomerang
 import pygame
 import math
-from enum import Enum
 
 #DOWN = 1
 #SIDE = 4
 #UP = 7
+
+weapons = {
+    'boomerang': Boomerang
+}
 
 
 class Player(Sprite):
@@ -32,11 +36,38 @@ class Player(Sprite):
         self.image_frame = 1
         self.update_rect()
         self.walking_framerate = 0
-        self.moving_direction = 0
+        self.moving_direction = 3
+        self.current_weapon = 'boomerang'
+        self.weapon = weapons[self.current_weapon]
+        self.projectiles = pygame.sprite.Group()
 
     def update(self):
         super().update()
+
         self.handle_movement()
+        self.handle_weapon()
+        self.projectiles.update()
+        self.projectiles.draw(self.screen)
+
+    def handle_weapon(self):
+        key = pygame.key.get_pressed()
+        if key[pygame.K_SPACE]:
+
+            if self.current_weapon == 'boomerang':
+                if not self.projectiles.has(self.weapon): # Make sure only one boomerang exists
+
+                    if self.moving_direction == 1:
+                        direction = pygame.Vector2((0, -1))
+                    elif self.moving_direction == 2:
+                        direction = pygame.Vector2((-1, 0))
+                    elif self.moving_direction == 3:
+                        direction = pygame.Vector2((0, 1))
+                    else:
+                        direction = pygame.Vector2((1, 0))
+
+                    self.weapon = weapons[self.current_weapon]((self.rect.x, self.rect.y), direction, self)
+                    self.projectiles.add(self.weapon)
+                    print('boomerang')
 
     def handle_movement(self):
         dx = 0
@@ -64,7 +95,7 @@ class Player(Sprite):
 
         if dx == 0 and dy == 0:
             self.walking_framerate = 0
-            # If we were walking and stopped, keep last looking to
+            # If we were walking and stopped, keep looking to
             # the direction we were looking before
             if self.moving_direction == 1:
                 self.image_frame = 7
@@ -79,14 +110,20 @@ class Player(Sprite):
                 self.image_frame = 4
                 self.update_rect(flip=True)
 
-            self.moving_direction = 0
-
         for tile in self.stage.tile_list:
             # Check only blocks which are on screen and are interactable
             if tile[1].bottom > 0 and tile[
                     1].top < self.settings.screen_height and tile[
                         2].is_interactable:
-                # Check if it's solid:
+
+                # First run block interaction code. The collision is checked with
+                # the player's standing point
+                if tile[1].colliderect(self.rect.x, self.rect.y+3*self.rect.height/4,
+                                       self.rect.width, self.rect.height/4):
+                    tile[2].player_interaction(self)
+
+                # Then check if it's solid. We do it on that order in case
+                # the block changes the player's speed.
                 if tile[2].is_solid and (dx or dy):
                     # Check collision in x direction
                     delta_x = self.speed * dx / math.sqrt(dx * dx + dy * dy)
@@ -98,19 +135,6 @@ class Player(Sprite):
                     if tile[1].colliderect(self.rect.x, self.rect.y + delta_y,
                                            self.rect.width, self.rect.height):
                         dy = 0
-            elif tile[1].bottom > 0 and tile[
-                    1].top < self.settings.screen_height and (dx or dy):
-                delta_y = self.speed * dy / math.sqrt(dx * dx + dy * dy)
-                if tile[1].collidepoint(
-                        self.rect.x, self.rect.y + delta_y + self.rect.height):
-                    if tile[2].name == self.settings.GRASS:
-                        self.speed = self.settings.GRASS_SPEED
-                    if tile[2].name == self.settings.ASPHALT:
-                        self.speed = self.settings.ASPHALT_SPEED
-                    if tile[2].name == self.settings.DIRT:
-                        self.speed = self.settings.DIRT_SPEED
-                    if tile[2].name == self.settings.WATER:
-                        self.speed = self.settings.WATER_SPEED
 
         if dx or dy:
             self.rect.x += self.speed * dx / math.sqrt(dx * dx + dy * dy)

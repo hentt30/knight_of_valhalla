@@ -14,4 +14,8 @@ class Water(Block):
         settings: any,
         path: str = 'advancing_hero/images/png/rpgTile029.png',
     ):
-        super().__init__(os.path.abspath(path), settings, settings.WATER)
+        super().__init__(os.path.abspath(path), settings, settings.WATER, interactable=True)
+
+    def player_interaction(self, player, *args, **kwargs):
+        super().player_interaction(player)
+        player.speed = self.settings.WATER_SPEED

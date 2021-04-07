@@ -14,4 +14,8 @@ class Asphalt(Block):
         settings: any,
         path: str = 'advancing_hero/images/png/rpgTile133.png',
     ) -> None:
-        super().__init__(os.path.abspath(path), settings, settings.ASPHALT)
+        super().__init__(os.path.abspath(path), settings, settings.ASPHALT, interactable=True)
+
+    def player_interaction(self, player):
+        super().player_interaction(player)
+        player.speed = self.settings.ASPHALT_SPEED

@@ -45,3 +45,6 @@ class Block:
         tile = (self.image_scaled, self.image_rectangle, self)
         tile_list.append(tile)
         return tile_list
+
+    def player_interaction(self, player):
+        pass

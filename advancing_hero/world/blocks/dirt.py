@@ -14,4 +14,8 @@ class Dirt(Block):
         settings: any,
         path: str = 'advancing_hero/images/png/rpgTile026.png',
     ) -> None:
-        super().__init__(os.path.abspath(path), settings, settings.DIRT)
+        super().__init__(os.path.abspath(path), settings, settings.DIRT, interactable=True)
+
+    def player_interaction(self, player):
+        super().player_interaction(player)
+        player.speed = self.settings.DIRT_SPEED
