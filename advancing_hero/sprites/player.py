@@ -1,6 +1,7 @@
 import os
 from .sprite import Sprite
 from .boomerang import Boomerang
+from .healthbar import HealthBar
 from .arrow import Arrow
 import pygame
 import math
@@ -9,10 +10,7 @@ import math
 #SIDE = 4
 #UP = 7
 
-weapons = {
-    'boomerang': Boomerang,
-    'arrow': Arrow
-}
+weapons = {'boomerang': Boomerang, 'arrow': Arrow}
 
 
 class Player(Sprite):
@@ -28,9 +26,11 @@ class Player(Sprite):
         max_health: float = 100,
         path: str = 'advancing_hero/images/sprites/player/',
     ) -> None:
-        super().__init__(path=os.path.abspath(path),
-                         position=position,
-                         max_health=max_health)
+        super().__init__(
+            path=os.path.abspath(path),
+            position=position,
+            max_health=max_health,
+        )
         self.speed = settings.DEFAULT_PLAYER_SPEED
         self.screen = screen
         self.settings = settings
@@ -39,19 +39,24 @@ class Player(Sprite):
         self.update_rect()
         self.walking_framerate = 0
         self.moving_direction = 3
-        self.current_weapon = 'arrow'
+        self.current_weapon = 'boomerang'
         self.weapon = weapons[self.current_weapon]
         self.attack_cooldown = 0
         self.projectiles = pygame.sprite.Group()
+        self.health_bar = HealthBar(screen=screen,
+                                    parent_sprite=self,
+                                    offset=(0, -32))
+        self.alive = True
 
     def update(self):
         super().update()
 
+        self.check_alive()
         self.handle_movement()
         self.handle_weapon()
         self.projectiles.update(self.stage)
         self.projectiles.draw(self.screen)
-
+        self.health_bar.update()
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
 
@@ -60,7 +65,8 @@ class Player(Sprite):
         if key[pygame.K_SPACE]:
 
             if self.current_weapon == 'boomerang':
-                if not self.projectiles.has(self.weapon): # Make sure only one boomerang exists
+                if not self.projectiles.has(
+                        self.weapon):  # Make sure only one boomerang exists
 
                     if self.moving_direction == 1:
                         direction = pygame.Vector2((0, -1))
@@ -71,14 +77,24 @@ class Player(Sprite):
                     else:
                         direction = pygame.Vector2((1, 0))
 
-                    self.weapon = weapons[self.current_weapon]((self.rect.centerx, self.rect.centery), direction, self)
+                    self.weapon = weapons[self.current_weapon](
+                        (self.rect.centerx, self.rect.centery), direction,
+                        self, self.settings)
                     self.projectiles.add(self.weapon)
 
-            if self.current_weapon == 'arrow' and self.attack_cooldown == 0 and len(self.projectiles.sprites()) < 3:
+            if self.current_weapon == 'arrow' and self.attack_cooldown == 0 and len(
+                    self.projectiles.sprites()) < 3:
                 self.attack_cooldown += 15
-                self.weapon = weapons[self.current_weapon]((self.rect.centerx-4, self.rect.centery),
-                                                           self.moving_direction, self.settings)
+                self.weapon = weapons[self.current_weapon](
+                    (self.rect.centerx - 4, self.rect.centery),
+                    self.moving_direction, self.settings)
                 self.projectiles.add(self.weapon)
+        if key[pygame.K_UP]:
+            ## change boomerang
+            self.current_weapon = 'boomerang'
+        if key[pygame.K_DOWN]:
+            ## change boomerang
+            self.current_weapon = 'arrow'
 
     def handle_movement(self):
         dx = 0
@@ -129,8 +145,9 @@ class Player(Sprite):
 
                 # First run block interaction code. The collision is checked with
                 # the player's standing point
-                if tile[1].colliderect(self.rect.x, self.rect.y+3*self.rect.height/4,
-                                       self.rect.width, self.rect.height/4):
+                if tile[1].colliderect(self.rect.x,
+                                       self.rect.y + 3 * self.rect.height / 4,
+                                       self.rect.width, self.rect.height / 4):
                     tile[2].player_interaction(self)
 
                 # Then check if it's solid. We do it on that order in case
@@ -184,7 +201,8 @@ class Player(Sprite):
 
     def draw(self):
         self.screen.blit(self.image, self.rect)
-        pygame.draw.rect(self.screen, (255, 0, 0), self.rect, 2)
+        if self.settings.DEBUG:
+            pygame.draw.rect(self.screen, (255, 0, 0), self.rect, 2)
 
     def walk_animation(self, still_frame, direction, flip=False):
         if self.walking_framerate == 0:
@@ -208,3 +226,18 @@ class Player(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = temp_rect.x
         self.rect.y = temp_rect.y
+
+    def hurt(self, damage):
+        self.current_health = max(self.current_health - damage, 0)
+        return True
+
+    def check_alive(self):
+        if self.current_health == 0:
+            self.alive = False
+            pygame.event.post(
+                pygame.event.Event(pygame.USEREVENT, customType='end_game'))
+
+    def push(self):
+        self.rect.y += 5
+        if self.rect.bottom <= 0:
+            self.rect.y -= 5

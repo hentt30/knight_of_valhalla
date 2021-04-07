@@ -12,10 +12,12 @@ class Boomerang(Sprite):
         position,
         initial_direction,
         player,
+        settings,
         path: str = 'advancing_hero/images/sprites/boomerang/',
     ) -> None:
         super().__init__(path=os.path.abspath(path), position=position)
-        self.image = pygame.transform.scale2x(self.image_list[self.image_frame])
+        self.image = pygame.transform.scale2x(
+            self.image_list[self.image_frame])
         temp_rect = self.rect
         self.rect = self.image.get_rect()
         self.rect.x = temp_rect.x
@@ -28,6 +30,7 @@ class Boomerang(Sprite):
         self.player = player
         self.state = 0
         self.damage = 2.5
+        self.settings = settings
 
     def update(self, stage):
         super().update()
@@ -35,7 +38,8 @@ class Boomerang(Sprite):
         if self.frame_counter % self.animation_framerate == 0:
             self.image_frame = (self.image_frame + 1) % len(self.image_list)
             self.image = self.image_list[self.image_frame]
-            self.image = pygame.transform.scale2x(self.image_list[self.image_frame])
+            self.image = pygame.transform.scale2x(
+                self.image_list[self.image_frame])
             temp_rect = self.rect
             self.rect = self.image.get_rect()
             self.rect.x = temp_rect.x
@@ -59,6 +63,11 @@ class Boomerang(Sprite):
                 self.kill()
 
     def hurt_enemies(self, stage):
+        for tile in stage.tile_list:
+            if tile[1].bottom > 0 and tile[
+                    1].top < self.settings.screen_height and tile[2].is_solid:
+                if tile[1].colliderect(self.rect):
+                    self.kill()
         for enemy in stage.all_enemies.sprites():
             if self.rect.colliderect(enemy.rect):
                 enemy.hurt(self.damage)
