@@ -20,7 +20,7 @@ GRASS = 'grass'
 DIRT = 'sand'
 WATER = 'water'
 
-level_1 = 'advancing_hero/world/world_temp.json'
+level_1 = 'advancing_hero/world/world.json'
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)

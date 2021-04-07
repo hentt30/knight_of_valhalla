@@ -52,7 +52,7 @@ for row in range(rows):
     r = [0] * cols
     world_data.append(r)
 ## Load existant world
-with open('../advancing_hero/world/world.json') as world_file:
+with open('../advancing_hero/world/old_world.json') as world_file:
     existant_world = json.load(world_file)
 
 existant_world.reverse()
