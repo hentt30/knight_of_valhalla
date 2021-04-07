@@ -1,6 +1,7 @@
 import os
 from .sprite import Sprite
 from .boomerang import Boomerang
+from .arrow import Arrow
 import pygame
 import math
 
@@ -9,7 +10,8 @@ import math
 #UP = 7
 
 weapons = {
-    'boomerang': Boomerang
+    'boomerang': Boomerang,
+    'arrow': Arrow
 }
 
 
@@ -37,8 +39,9 @@ class Player(Sprite):
         self.update_rect()
         self.walking_framerate = 0
         self.moving_direction = 3
-        self.current_weapon = 'boomerang'
+        self.current_weapon = 'arrow'
         self.weapon = weapons[self.current_weapon]
+        self.attack_cooldown = 0
         self.projectiles = pygame.sprite.Group()
 
     def update(self):
@@ -48,6 +51,9 @@ class Player(Sprite):
         self.handle_weapon()
         self.projectiles.update()
         self.projectiles.draw(self.screen)
+
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= 1
 
     def handle_weapon(self):
         key = pygame.key.get_pressed()
@@ -67,7 +73,12 @@ class Player(Sprite):
 
                     self.weapon = weapons[self.current_weapon]((self.rect.x, self.rect.y), direction, self)
                     self.projectiles.add(self.weapon)
-                    print('boomerang')
+
+            if self.current_weapon == 'arrow' and self.attack_cooldown == 0 and len(self.projectiles.sprites()) < 3:
+                self.attack_cooldown += 15
+                self.weapon = weapons[self.current_weapon]((self.rect.centerx-4, self.rect.centery),
+                                                           self.moving_direction, self.settings)
+                self.projectiles.add(self.weapon)
 
     def handle_movement(self):
         dx = 0

@@ -16,6 +16,11 @@ class Boomerang(Sprite):
     ) -> None:
         super().__init__(path=os.path.abspath(path), position=position)
         self.image = pygame.transform.scale2x(self.image_list[self.image_frame])
+        temp_rect = self.rect
+        self.rect = self.image.get_rect()
+        self.rect.x = temp_rect.x
+        self.rect.y = temp_rect.y
+
         self.animation_framerate = 10
         self.direction = initial_direction
         self.speed = 11
@@ -29,6 +34,10 @@ class Boomerang(Sprite):
             self.image_frame = (self.image_frame + 1) % len(self.image_list)
             self.image = self.image_list[self.image_frame]
             self.image = pygame.transform.scale2x(self.image_list[self.image_frame])
+            temp_rect = self.rect
+            self.rect = self.image.get_rect()
+            self.rect.x = temp_rect.x
+            self.rect.y = temp_rect.y
 
         if self.state == 0:
             self.rect.x += self.speed * self.direction.x
@@ -46,10 +55,3 @@ class Boomerang(Sprite):
             self.speed += self.acceleration
             if self.rect.colliderect(self.player.rect):
                 self.kill()
-
-    def prepare_throw(self, position, direction):
-        self.rect.x = position[0]
-        self.rect.y = position[1]
-        self.direction = direction
-        self.speed = 4
-        self.state = 0
