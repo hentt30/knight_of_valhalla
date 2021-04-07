@@ -17,7 +17,8 @@ class Arrow(Sprite):
         super().__init__(path=os.path.abspath(path), position=position)
         self.settings = settings
         temp_rect = self.rect
-        self.image = pygame.transform.scale2x(self.image_list[self.image_frame])
+        self.image = pygame.transform.scale2x(
+            self.image_list[self.image_frame])
         self.animation_framerate = 10
         speed = 10
         if initial_direction == 1:
@@ -43,13 +44,21 @@ class Arrow(Sprite):
 
         self.hurt_enemies(stage)
 
-        if not self.rect.colliderect(pygame.Rect(0, 0, self.settings.screen_width, self.settings.screen_height)):
+        if not self.rect.colliderect(
+                pygame.Rect(0, 0, self.settings.screen_width,
+                            self.settings.screen_height)):
             self.kill()
 
     def hurt_enemies(self, stage):
+        for tile in stage.tile_list:
+            if tile[1].bottom > 0 and tile[
+                    1].top < self.settings.screen_height and tile[2].is_solid:
+                if tile[1].colliderect(self.rect):
+                    self.kill()
         for enemy in stage.all_enemies.sprites():
             if self.rect.colliderect(enemy.rect):
-                hit = enemy.hurt(self.damage) # Interactable enemies must return true
+                hit = enemy.hurt(
+                    self.damage)  # Interactable enemies must return true
                 # That is done so the projectiles don't interact with the player's attacks
                 if hit:
                     self.kill()

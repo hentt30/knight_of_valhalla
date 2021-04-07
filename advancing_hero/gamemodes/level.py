@@ -19,8 +19,7 @@ class LevelGameMode(GameMode):
 
         self.player.update()
         self.player.draw()
-
-        self.helper_font.render_to(self.screen,
-                                   (0, self.settings.screen_height - 20),
-                                   "W: UP   S: DOWN   A: LEFT   D: RIGHT",
-                                   self.settings.WHITE)
+        self.helper_font.render_to(
+            self.screen, (0, self.settings.screen_height - 20),
+            "W: UP   S: DOWN   A: LEFT   D: RIGHT   SPACE: HIT   UP: BOOMERANG    DOWN: ARROW",
+            self.settings.WHITE)
