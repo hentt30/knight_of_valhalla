@@ -17,7 +17,10 @@ class World:
         self.tile_list = []
         self.settings = settings
         with open(level_data) as world_file:
-            self.stage_data = json.load(world_file)
+            self.json_data = json.load(world_file)
+        self.stage_data = self.json_data["block_data"]
+        self.sprite_data = self.json_data["sprite_data"]
+        print(self.sprite_data)
         self.stage_data.reverse()
 
         self.blocks = {
@@ -27,6 +30,11 @@ class World:
             4: blocks.Brick,
             5: blocks.Asphalt
         }
+
+        self.sprites = {
+            'bat_sprite': sprites.Bat
+        }
+
         self.true_scroll = 0.0
         self.screen = screen
         self.frame_counter = 0
@@ -39,18 +47,15 @@ class World:
                     self.settings.SCREEN_ROWS - 1 - row_index)
 
         self.all_enemies = pygame.sprite.Group()
-        S1 = sprites.SpriteTest(position=(512, 288),
-                                max_health=66,
-                                screen=screen)
-        S2 = sprites.SpriteTest(position=(256, 288),
-                                max_health=33,
-                                screen=screen)
-        S3 = sprites.Bat(position=(512 + 256, 288),
-                         max_health=100,
-                         screen=screen)
-        self.all_enemies.add(S1)
-        self.all_enemies.add(S2)
-        self.all_enemies.add(S3)
+
+        # Spawn sprites which should be on screen already (i.e., position y <= screen.height
+        for sprite_index, sprite_element in enumerate(reversed(self.sprite_data)):
+            if sprite_element[2] <= self.settings.screen_height:
+                new_sprite = self.sprites[sprite_element[0]](
+                    position=(sprite_element[1], sprite_element[2]),
+                    screen=screen)
+                self.all_enemies.add(new_sprite)
+                self.sprite_data.remove(sprite_element)
 
     def update(self, screen: any, player) -> None:
         """
@@ -62,7 +67,6 @@ class World:
                 :param screen:
                 :param player:
         """
-
         self.scroll_world(screen, player)
 
         self.all_enemies.update(player)
@@ -86,3 +90,13 @@ class World:
                 tile[1].y += scroll - prev_scroll
             screen.blit(tile[0], tile[1])
             pygame.draw.rect(screen, (255, 255, 255), tile[1], 2)
+
+        # Check if we should spawn new sprites
+        for sprite_index, sprite_element in enumerate(reversed(self.sprite_data)):
+            if sprite_element[2] <= self.settings.screen_height+self.true_scroll:
+                print(sprite_element)
+                new_sprite = self.sprites[sprite_element[0]](
+                    position=(sprite_element[1], sprite_element[2]-(self.settings.screen_height+self.true_scroll)),
+                    screen=screen)
+                self.all_enemies.add(new_sprite)
+                self.sprite_data.remove(sprite_element)

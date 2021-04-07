@@ -39,7 +39,7 @@ class Player(Sprite):
         self.update_rect()
         self.walking_framerate = 0
         self.moving_direction = 3
-        self.current_weapon = 'boomerang'
+        self.current_weapon = 'arrow'
         self.weapon = weapons[self.current_weapon]
         self.attack_cooldown = 0
         self.projectiles = pygame.sprite.Group()

@@ -49,5 +49,7 @@ class Arrow(Sprite):
     def hurt_enemies(self, stage):
         for enemy in stage.all_enemies.sprites():
             if self.rect.colliderect(enemy.rect):
-                enemy.hurt(self.damage)
-                self.kill()
+                hit = enemy.hurt(self.damage) # Interactable enemies must return true
+                # That is done so the projectiles don't interact with the player's attacks
+                if hit:
+                    self.kill()
