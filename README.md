@@ -1,4 +1,4 @@
-Advancing Hero*
+*Advancing Hero*
 ============================================
 
 Projeto de Ces-22
