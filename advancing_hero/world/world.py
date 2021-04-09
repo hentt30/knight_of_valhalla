@@ -30,7 +30,10 @@ class World:
             5: blocks.Asphalt
         }
 
-        self.sprites = {'bat_sprite': sprites.Bat}
+        self.sprites = {
+            'bat_sprite': sprites.Bat,
+            'monster_sprite': sprites.Monster
+        }
 
         self.true_scroll = 0.0
         self.screen = screen
