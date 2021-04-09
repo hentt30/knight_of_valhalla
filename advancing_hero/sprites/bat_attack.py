@@ -38,6 +38,11 @@ class BatAttack(Sprite):
         self.rect.x = self.position[0]
         self.rect.y = self.position[1]
         self.player_collision(player)
+        for tile in stage.tile_list:
+            if tile[1].bottom > 0 and tile[
+                    1].top < stage.settings.screen_height and tile[2].is_solid:
+                if tile[1].colliderect(self.rect):
+                    self.kill()
 
     def player_collision(self, player):
         if self.rect.colliderect(player.rect):

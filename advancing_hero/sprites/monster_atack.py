@@ -30,16 +30,27 @@ class MonsterAttack(Sprite):
         self.rect.x = position[0]
         self.rect.y = position[1]
         self.damage = 1
+        self.collide_player = False
+        self.explosion_frame = 1
+        self.explosion_duration = 5
 
     def update(self, player, stage):
         super().update()
-        self.position[0] += self.speed * self.direction.x
-        self.position[1] += self.speed * self.direction.y
-        self.rect.x = self.position[0]
-        self.rect.y = self.position[1]
-        self.player_collision(player)
+        if not self.collide_player:
+            self.position[0] += self.speed * self.direction.x
+            self.position[1] += self.speed * self.direction.y
+            self.rect.x = self.position[0]
+            self.rect.y = self.position[1]
+            self.player_collision(player)
+        else:
+            if self.explosion_frame % self.explosion_duration != 0:
+                self.image = self.image_list[self.explosion_frame]
+                self.explosion_frame += 1
+            else:
+                self.kill()
 
     def player_collision(self, player):
         if self.rect.colliderect(player.rect):
+            self.collide_player = True
+            self.image = self.image_list[-1]
             player.hurt(self.damage)
-            self.kill()
