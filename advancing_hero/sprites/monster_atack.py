@@ -36,15 +36,20 @@ class MonsterAttack(Sprite):
         self.explosion_frame = 1
         self.explosion_duration = 5
         self.final_position = final_position
+        self.stopped = False
 
     def update(self, player, stage):
         super().update()
-        if math.dist(self.position, self.final_position) > 5:
+        if math.dist(self.position,
+                     self.final_position) > 5 and not self.stopped:
             self.position[0] += self.speed * self.direction.x
             self.position[1] += self.speed * self.direction.y
             self.rect.x = self.position[0]
             self.rect.y = self.position[1]
         else:
+            self.stopped = True
+            self.position[1] += stage.settings.WORLD_SPEED
+            self.rect.y = self.position[1]
             self.player_collision(player)
             if self.explosion_frame % self.explosion_duration != 0 and self.collide_player:
                 self.image = self.image_list[self.explosion_frame]
