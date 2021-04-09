@@ -10,9 +10,8 @@ class LevelGameMode(GameMode):
         self.level_file = level_file
         self.settings = settings
         self.stage = World(settings, self.level_file, screen)
-
         self.player = Player((512, 288), settings, self.stage, self.screen)
-        self.helper_font = pygame.freetype.SysFont('Comic Sans MS', 16)
+        self.helper_font = pygame.freetype.Font(self.font_path, 11)
 
     def loop(self, events):
         self.stage.update(self.screen, self.player)
@@ -20,6 +19,6 @@ class LevelGameMode(GameMode):
         self.player.update()
         self.player.draw()
         self.helper_font.render_to(
-            self.screen, (0, self.settings.screen_height - 20),
+            self.screen, (5, self.settings.screen_height - 20),
             "W: UP   S: DOWN   A: LEFT   D: RIGHT   SPACE: HIT   UP: BOOMERANG    DOWN: ARROW",
-            self.settings.WHITE)
+            self.settings.BLACK)

@@ -13,6 +13,7 @@ class GameMode:
 
     def __init__(self, screen) -> None:
         self.screen = screen
+        self.font_path = os.path.abspath('advancing_hero/fonts/zerovelo.ttf')
         pass
 
     def loop(self, events):

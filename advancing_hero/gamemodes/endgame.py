@@ -20,8 +20,8 @@ class EndGame(GameMode):
             pygame.image.load(
                 os.path.abspath('advancing_hero/images/endscreen.png')),
             self.settings.SIZE)
-        self.game_over_font = pygame.font.SysFont('comicsansms', 150)
-        self.press_key_font = pygame.font.SysFont('comicsansms', 80)
+        self.game_over_font = pygame.font.Font(self.font_path, 100)
+        self.press_key_font = pygame.font.Font(self.font_path, 30)
 
     def loop(self, events):
         """
@@ -37,11 +37,11 @@ class EndGame(GameMode):
         game_rect = game_text.get_rect()
         over_rect = over_text.get_rect()
         press_rect = press_key_text.get_rect()
-        game_rect.midtop = (self.settings.screen_width / 2, 10)
+        game_rect.midtop = (self.settings.screen_width / 2, 80)
         over_rect.midtop = (self.settings.screen_width / 2,
-                            game_rect.height + 10 + 25)
+                            game_rect.height + 80 + 25)
         press_rect.midtop = (self.settings.screen_width / 2,
-                             over_rect.height + 180)
+                             over_rect.height + 240)
         self.screen.blit(game_text, game_rect)
         self.screen.blit(over_text, over_rect)
         self.screen.blit(press_key_text, press_rect)
