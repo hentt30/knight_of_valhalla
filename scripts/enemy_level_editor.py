@@ -9,7 +9,10 @@ enemy_name = 'bat_sprite'
 enemies_available = {
     'bat_sprite':
     pygame.image.load(
-        path.abspath('../advancing_hero/images/sprites/bat/frame1.png'))
+        path.abspath('../advancing_hero/images/sprites/bat/frame1.png')),
+    'monster_sprite':
+    pygame.image.load(
+        path.abspath('../advancing_hero/images/sprites/monster/frame1.png'))
 }
 ###########################################################
 

@@ -63,11 +63,6 @@ class Boomerang(Sprite):
                 self.kill()
 
     def hurt_enemies(self, stage):
-        for tile in stage.tile_list:
-            if tile[1].bottom > 0 and tile[
-                    1].top < self.settings.screen_height and tile[2].is_solid:
-                if tile[1].colliderect(self.rect):
-                    self.kill()
         for enemy in stage.all_enemies.sprites():
             if self.rect.colliderect(enemy.rect):
                 enemy.hurt(self.damage)
