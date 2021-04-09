@@ -56,8 +56,9 @@ class Monster(Sprite):
             direction = pygame.math.Vector2.normalize(
                 pygame.Vector2((delta_x, delta_y)))
             position = [self.rect.centerx, self.rect.centery]
-            new_projectile = MonsterAttack(position, direction_angle,
-                                           direction)
+            new_projectile = MonsterAttack(
+                position, direction_angle, direction,
+                (player.rect.centerx, player.rect.centery))
             self.groups()[0].add(new_projectile)
 
     def player_collision(self, player):
