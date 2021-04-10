@@ -32,7 +32,8 @@ class World:
 
         self.sprites = {
             'bat_sprite': sprites.Bat,
-            'monster_sprite': sprites.Monster
+            'monster_sprite': sprites.Monster,
+            'ship_sprite': sprites.Ship
         }
 
         self.true_scroll = 0.0

@@ -2,7 +2,6 @@ import os
 from .sprite import Sprite
 import math
 import pygame
-import math
 
 
 class MonsterAttack(Sprite):
