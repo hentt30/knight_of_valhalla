@@ -23,7 +23,7 @@ class ShipAttack(Sprite):
         self.angle = direction_angle - math.pi / 2
         self.image = pygame.transform.rotate(self.image,
                                              180 * self.angle / math.pi)
-        self.image = pygame.transform.scale(self.image, (70, 70))
+        self.image = pygame.transform.scale2x(self.image)
         self.rect = self.image.get_rect()
         self.speed = 3
         self.position = position
@@ -31,8 +31,8 @@ class ShipAttack(Sprite):
         self.rect.y = position[1]
         self.damage = 10
         self.collide_player = False
-        self.explosion_frame = 1
-        self.explosion_duration = 5
+        self.explosion_frame = 2
+        self.explosion_duration = 6
 
     def update(self, player, stage):
         super().update()
