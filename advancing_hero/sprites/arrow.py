@@ -35,7 +35,7 @@ class Arrow(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = temp_rect.x
         self.rect.y = temp_rect.y
-        self.damage = 20
+        self.damage = 25
 
     def update(self, stage):
         super().update()

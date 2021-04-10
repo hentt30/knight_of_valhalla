@@ -35,6 +35,9 @@ while run:
             if event.customType == 'end_game':
                 current_gamemode = gamemodes.modes['end_game']
                 game_admin = current_gamemode(screen, settings)
+            if event.customType == 'win_game':
+                current_gamemode = gamemodes.modes['win_game']
+                game_admin = current_gamemode(screen, settings)
 
     game_admin.loop(events)
 

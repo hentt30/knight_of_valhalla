@@ -31,7 +31,7 @@ class MonsterAttack(Sprite):
         self.position = position
         self.rect.x = position[0]
         self.rect.y = position[1]
-        self.damage = 2
+        self.damage = 8
         self.collide_player = False
         self.explosion_frame = 1
         self.explosion_duration = 5

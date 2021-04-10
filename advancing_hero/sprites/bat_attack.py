@@ -29,7 +29,7 @@ class BatAttack(Sprite):
         self.position = position
         self.rect.x = position[0]
         self.rect.y = position[1]
-        self.damage = 1
+        self.damage = 7
 
     def update(self, player, stage):
         super().update()
