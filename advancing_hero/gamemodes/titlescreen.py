@@ -20,6 +20,12 @@ class TitleScreen(GameMode):
         self.menu_font = pygame.freetype.Font(self.font_path, 25)
         self.commands_font = pygame.freetype.Font(self.font_path, 15)
         self.icon_position = 0
+        self.music_path = os.path.abspath('advancing_hero/musics/sawsquarenoise-Stage3.ogg')
+
+    def play_music(self):
+        pygame.mixer.init()
+        pygame.mixer.music.load(self.music_path)
+        pygame.music.play(-1)
 
     def loop(self, events):
         self.screen.blit(self.background_image, (0, 0))
@@ -57,3 +63,4 @@ class TitleScreen(GameMode):
                             pygame.event.Event(pygame.USEREVENT,
                                                customType='init_level',
                                                level=self.settings.level_1))
+

@@ -2,6 +2,7 @@ import os
 from .sprite import Sprite
 from .boomerang import Boomerang
 from .healthbar import HealthBar
+from .oxygenbar import OxygenBar
 from .arrow import Arrow
 import pygame
 import math
@@ -24,6 +25,7 @@ class Player(Sprite):
         stage,
         screen,
         max_health: float = 100,
+        max_oxygen: float = 100,
         path: str = 'advancing_hero/images/sprites/player/',
     ) -> None:
         super().__init__(
@@ -43,22 +45,54 @@ class Player(Sprite):
         self.weapon = weapons[self.current_weapon]
         self.attack_cooldown = 0
         self.projectiles = pygame.sprite.Group()
+        self.max_oxygen = max_oxygen
+        self.current_oxygen = max_oxygen
+        self.have_oxygen = True
+        self.in_water = False
+        self.alive = True
         self.health_bar = HealthBar(screen=screen,
                                     parent_sprite=self,
                                     offset=(0, -32))
+        self.oxygen_bar = OxygenBar(screen=screen,
+                                    parent_sprite=self,
+                                    )
+        self.current_oxygen = max_oxygen
+        self.have_oxygen = True
+        self.in_water = False
         self.alive = True
 
     def update(self):
         super().update()
-
+        self.check_oxygen()
         self.check_alive()
+        self.in_water = False
         self.handle_movement()
+        self.handle_breathing()
         self.handle_weapon()
         self.projectiles.update(self.stage)
         self.projectiles.draw(self.screen)
         self.health_bar.update()
+        self.oxygen_bar.update()
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
+
+    def handle_breathing(self):
+        for tile in self.stage.tile_list:
+            # Check only blocks which are on screen and are interactable
+            if tile[1].bottom > 0 and tile[
+                    1].top < self.settings.screen_height and tile[
+                        2].is_interactable:
+
+                # First run block interaction code. The collision is checked with
+                # the player's standing point
+                if tile[1].colliderect(self.rect.x,
+                                       self.rect.y + 3 * self.rect.height / 4,
+                                       self.rect.width, self.rect.height / 4):
+                    tile[2].player_interaction(self)
+        if self.in_water:
+            self.current_oxygen = max(self.current_oxygen - 1, 0)
+        else:
+            self.current_oxygen = min(self.current_oxygen + 1, self.max_oxygen)
 
     def handle_weapon(self):
         key = pygame.key.get_pressed()
@@ -230,6 +264,10 @@ class Player(Sprite):
     def hurt(self, damage):
         self.current_health = max(self.current_health - damage, 0)
         return True
+
+    def check_oxygen(self):
+        if self.current_oxygen == 0:
+            self.hurt(1.1)
 
     def check_alive(self):
         if self.current_health == 0:
