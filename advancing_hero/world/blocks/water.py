@@ -19,3 +19,4 @@ class Water(Block):
     def player_interaction(self, player, *args, **kwargs):
         super().player_interaction(player)
         player.speed = self.settings.WATER_SPEED
+        player.in_water = True

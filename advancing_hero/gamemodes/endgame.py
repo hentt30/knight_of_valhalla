@@ -22,6 +22,12 @@ class EndGame(GameMode):
             self.settings.SIZE)
         self.game_over_font = pygame.font.Font(self.font_path, 100)
         self.press_key_font = pygame.font.Font(self.font_path, 30)
+        self.music_path = os.path.abspath('advancing_hero/musics/level_music.wav')
+
+    def play_music(self):
+        pygame.mixer.init()
+        pygame.mixer.music.load(self.music_path)
+        pygame.music.play(-1)
 
     def loop(self, events):
         """
@@ -52,3 +58,4 @@ class EndGame(GameMode):
                 pygame.event.post(
                     pygame.event.Event(pygame.USEREVENT,
                                        customType='title_screen'))
+

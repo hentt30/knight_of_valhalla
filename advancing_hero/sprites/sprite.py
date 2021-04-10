@@ -15,7 +15,6 @@ class Sprite(pygame.sprite.Sprite):
         super().__init__()
         self.image_list = []
         self.image_frame = 0
-
         image_files = os.listdir(path)
         image_files.sort()
         for file in image_files:
@@ -27,7 +26,6 @@ class Sprite(pygame.sprite.Sprite):
         self.rect.centerx = position[0]
         self.rect.centery = position[1]
         self.frame_counter = 0
-
         self.max_health = max_health
         self.current_health = max_health
 
