@@ -14,8 +14,7 @@ class PotionHeal(Sprite):
         screen,
         path: str = 'advancing_hero/images/sprites/potion_heal/',
     ) -> None:
-        super().__init__(path=os.path.abspath(path),
-                         position=position)
+        super().__init__(path=os.path.abspath(path), position=position)
 
         self.rect = self.image.get_rect()
         self.speed = 5
@@ -23,6 +22,7 @@ class PotionHeal(Sprite):
         self.rect.x = position[0]
         self.rect.y = position[1]
         self.heal = 35
+        self.music_path = os.path.abspath('advancing_hero/songs/item.wav')
 
     def update(self, player, stage):
         super().update()
@@ -37,4 +37,9 @@ class PotionHeal(Sprite):
     def player_collision(self, player):
         if self.rect.colliderect(player.rect):
             player.heal(self.heal)
+            self.play_music()
             self.kill()
+
+    def play_music(self):
+        sound = pygame.mixer.Sound(self.music_path)
+        pygame.mixer.Channel(4).play(sound)

@@ -12,9 +12,12 @@ class Dirt(Block):
     def __init__(
         self,
         settings: any,
-        path: str = 'advancing_hero/images/png/rpgTile026.png',
+        path: str = 'advancing_hero/images/blocks/dirt.png',
     ) -> None:
-        super().__init__(os.path.abspath(path), settings, settings.DIRT, interactable=True)
+        super().__init__(os.path.abspath(path),
+                         settings,
+                         settings.DIRT,
+                         interactable=True)
 
     def player_interaction(self, player):
         super().player_interaction(player)

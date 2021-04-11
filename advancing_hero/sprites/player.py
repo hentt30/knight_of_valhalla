@@ -24,7 +24,7 @@ class Player(Sprite):
         settings,
         stage,
         screen,
-        max_health: float = 100,
+        max_health: float = 1000,
         max_oxygen: float = 100,
         path: str = 'advancing_hero/images/sprites/player/',
     ) -> None:
@@ -53,9 +53,10 @@ class Player(Sprite):
         self.health_bar = HealthBar(screen=screen,
                                     parent_sprite=self,
                                     offset=(0, -32))
-        self.oxygen_bar = OxygenBar(screen=screen,
-                                    parent_sprite=self,
-                                    )
+        self.oxygen_bar = OxygenBar(
+            screen=screen,
+            parent_sprite=self,
+        )
         self.current_oxygen = max_oxygen
         self.have_oxygen = True
         self.in_water = False

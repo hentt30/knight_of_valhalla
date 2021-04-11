@@ -30,6 +30,8 @@ class BatAttack(Sprite):
         self.rect.x = position[0]
         self.rect.y = position[1]
         self.damage = 7
+        self.music_path = os.path.abspath(
+            'advancing_hero/songs/bat_attack.wav')
 
     def update(self, player, stage):
         super().update()
@@ -47,4 +49,9 @@ class BatAttack(Sprite):
     def player_collision(self, player):
         if self.rect.colliderect(player.rect):
             player.hurt(self.damage)
+            self.play_music()
             self.kill()
+
+    def play_music(self):
+        sound = pygame.mixer.Sound(self.music_path)
+        pygame.mixer.Channel(3).play(sound)

@@ -32,10 +32,12 @@ class MonsterAttack(Sprite):
         self.rect.y = position[1]
         self.damage = 8
         self.collide_player = False
-        self.explosion_frame = 1
-        self.explosion_duration = 5
+        self.explosion_frame = 5
+        self.explosion_duration = 10
         self.final_position = final_position
         self.stopped = False
+        self.initial_frame = 0
+        self.music_path = os.path.abspath('advancing_hero/songs/explosion.wav')
 
     def update(self, player, stage):
         super().update()
@@ -45,19 +47,29 @@ class MonsterAttack(Sprite):
             self.position[1] += self.speed * self.direction.y
             self.rect.x = self.position[0]
             self.rect.y = self.position[1]
-        else:
+            self.image = self.image_list[self.initial_frame]
+            self.initial_frame += 1
+            self.initial_frame = self.initial_frame % 5
+        elif not self.collide_player:
+            self.image = self.image_list[0]
             self.stopped = True
             self.position[1] += stage.settings.WORLD_SPEED
             self.rect.y = self.position[1]
             self.player_collision(player)
-            if self.explosion_frame % self.explosion_duration != 0 and self.collide_player:
-                self.image = self.image_list[self.explosion_frame]
-                self.explosion_frame += 1
-            elif self.collide_player:
-                self.kill()
+
+        if self.explosion_frame % self.explosion_duration != 0 and self.collide_player:
+            self.image = self.image_list[self.explosion_frame]
+            self.explosion_frame += 1
+        elif self.collide_player:
+            self.play_music()
+            self.kill()
 
     def player_collision(self, player):
         if self.rect.colliderect(player.rect) and not self.collide_player:
             self.collide_player = True
             self.image = self.image_list[-1]
             player.hurt(self.damage)
+
+    def play_music(self):
+        sound = pygame.mixer.Sound(self.music_path)
+        pygame.mixer.Channel(1).play(sound)
