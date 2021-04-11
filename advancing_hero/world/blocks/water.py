@@ -12,9 +12,12 @@ class Water(Block):
     def __init__(
         self,
         settings: any,
-        path: str = 'advancing_hero/images/png/rpgTile029.png',
+        path: str = 'advancing_hero/images/blocks/water.png',
     ):
-        super().__init__(os.path.abspath(path), settings, settings.WATER, interactable=True)
+        super().__init__(os.path.abspath(path),
+                         settings,
+                         settings.WATER,
+                         interactable=True)
 
     def player_interaction(self, player, *args, **kwargs):
         super().player_interaction(player)

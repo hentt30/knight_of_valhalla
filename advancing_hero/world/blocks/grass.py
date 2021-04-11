@@ -12,9 +12,12 @@ class Grass(Block):
     def __init__(
         self,
         settings,
-        path: str = 'advancing_hero/images/png/rpgTile019.png',
+        path: str = 'advancing_hero/images/blocks/grass.png',
     ) -> None:
-        super().__init__(os.path.abspath(path), settings, settings.GRASS, interactable=True)
+        super().__init__(os.path.abspath(path),
+                         settings,
+                         settings.GRASS,
+                         interactable=True)
 
     def player_interaction(self, player):
         super().player_interaction(player)

@@ -22,18 +22,18 @@ pygame.display.set_caption('Level Editor')
 
 #load images
 grass_img = pygame.image.load(
-    path.abspath('../advancing_hero/images/png/rpgTile019.png'))
+    path.abspath('../advancing_hero/images/png/grass.png'))
 
 dirt_img = pygame.image.load(
-    path.abspath('../advancing_hero/images/png/rpgTile026.png'))
+    path.abspath('../advancing_hero/images/png/dirt.png'))
 water_img = pygame.image.load(
-    path.abspath('../advancing_hero/images/png/rpgTile029.png'))
+    path.abspath('../advancing_hero/images/png/water.png'))
 
 brick_img = pygame.image.load(
-    path.abspath('../advancing_hero/images/png/rpgTile061.png'))
+    path.abspath('../advancing_hero/images/png/brick.png'))
 
 asphalt_img = pygame.image.load(
-    path.abspath('../advancing_hero/images/png/rpgTile133.png'))
+    path.abspath('../advancing_hero/images/png/asphalt.png'))
 
 #define game variables
 clicked = False

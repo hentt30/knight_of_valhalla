@@ -8,6 +8,7 @@ pygame.init()
 clock = pygame.time.Clock()
 global current_gamemode
 global game_admin
+pygame.mixer.set_num_channels(10)
 
 screen = pygame.display.set_mode(
     (settings.screen_width, settings.screen_height))

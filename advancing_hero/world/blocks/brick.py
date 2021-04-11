@@ -12,7 +12,7 @@ class Brick(Block):
     def __init__(
         self,
         settings: any,
-        path: str = 'advancing_hero/images/png/rpgTile061.png',
+        path: str = 'advancing_hero/images/blocks/brick.png',
     ) -> None:
         super().__init__(os.path.abspath(path),
                          settings,

@@ -21,7 +21,7 @@ class Monster(Sprite):
                          position=position,
                          max_health=max_health)
         self.animation_framerate = 8
-        self.attack_framerate = 90
+        self.attack_framerate = 180
         self.health_bar = HealthBar(screen=screen,
                                     parent_sprite=self,
                                     offset=(0, -32))

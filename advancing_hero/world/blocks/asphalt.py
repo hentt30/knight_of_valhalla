@@ -12,9 +12,12 @@ class Asphalt(Block):
     def __init__(
         self,
         settings: any,
-        path: str = 'advancing_hero/images/png/rpgTile133.png',
+        path: str = 'advancing_hero/images/blocks/asphalt.png',
     ) -> None:
-        super().__init__(os.path.abspath(path), settings, settings.ASPHALT, interactable=True)
+        super().__init__(os.path.abspath(path),
+                         settings,
+                         settings.ASPHALT,
+                         interactable=True)
 
     def player_interaction(self, player):
         super().player_interaction(player)
