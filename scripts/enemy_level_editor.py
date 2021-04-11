@@ -5,7 +5,7 @@ import pickle
 from os import path
 import json
 ##### ENEMIES - ÚNICA PARTE EDITÁVEL DO CÓDIGO ###########
-enemy_name = 'bat_sprite'
+enemy_name = 'ship_sprite'
 enemies_available = {
     'bat_sprite':
     pygame.image.load(
@@ -15,7 +15,10 @@ enemies_available = {
         path.abspath('../advancing_hero/images/sprites/monster/frame1.png')),
     'potion_heal':
     pygame.image.load(
-        path.abspath('../advancing_hero/images/sprites/potion_heal/red_potion.png'))
+        path.abspath('../advancing_hero/images/sprites/potion_heal/red_potion.png')),
+    'ship_sprite':
+    pygame.image.load(
+        path.abspath('../advancing_hero/images/sprites/ship/frame1.png'))
 }
 ###########################################################
 

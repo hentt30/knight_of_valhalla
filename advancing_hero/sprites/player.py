@@ -118,7 +118,7 @@ class Player(Sprite):
 
             if self.current_weapon == 'arrow' and self.attack_cooldown == 0 and len(
                     self.projectiles.sprites()) < 3:
-                self.attack_cooldown += 15
+                self.attack_cooldown += 20
                 self.weapon = weapons[self.current_weapon](
                     (self.rect.centerx - 4, self.rect.centery),
                     self.moving_direction, self.settings)

@@ -1,12 +1,12 @@
 import os
 from .sprite import Sprite
-import math
 import pygame
+import math
 
 
-class BatAttack(Sprite):
+class ShipAttack(Sprite):
     """
-    Represents a bat
+    Represents a ship attack
     """
     def __init__(
         self,
@@ -14,7 +14,7 @@ class BatAttack(Sprite):
         direction_angle,
         direction,
         max_health: float = 100,
-        path: str = 'advancing_hero/images/sprites/bat_attack/',
+        path: str = 'advancing_hero/images/sprites/ship_attack/',
     ) -> None:
         super().__init__(path=os.path.abspath(path),
                          position=position,
@@ -25,11 +25,14 @@ class BatAttack(Sprite):
                                              180 * self.angle / math.pi)
         self.image = pygame.transform.scale2x(self.image)
         self.rect = self.image.get_rect()
-        self.speed = 5
+        self.speed = 3
         self.position = position
         self.rect.x = position[0]
         self.rect.y = position[1]
-        self.damage = 7
+        self.damage = 10
+        self.collide_player = False
+        self.explosion_frame = 2
+        self.explosion_duration = 6
 
     def update(self, player, stage):
         super().update()
@@ -38,13 +41,13 @@ class BatAttack(Sprite):
         self.rect.x = self.position[0]
         self.rect.y = self.position[1]
         self.player_collision(player)
-        for tile in stage.tile_list:
-            if tile[1].bottom > 0 and tile[
-                    1].top < stage.settings.screen_height and tile[2].is_solid:
-                if tile[1].colliderect(self.rect):
-                    self.kill()
+        if self.explosion_frame % self.explosion_duration != 0 and self.collide_player:
+            self.image = self.image_list[self.explosion_frame]
+            self.explosion_frame += 1
+        elif self.collide_player:
+            self.kill()
 
     def player_collision(self, player):
         if self.rect.colliderect(player.rect):
-            player.hurt(self.damage)
-            self.kill()
+            self.collide_player = True
+            self.image = self.image_list[-1]
