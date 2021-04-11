@@ -265,6 +265,10 @@ class Player(Sprite):
         self.current_health = max(self.current_health - damage, 0)
         return True
 
+    def heal(self, heal):
+        self.current_health = min(self.current_health + heal, self.max_health)
+        return True
+
     def check_oxygen(self):
         if self.current_oxygen == 0:
             self.hurt(1.1)

@@ -12,7 +12,10 @@ enemies_available = {
         path.abspath('../advancing_hero/images/sprites/bat/frame1.png')),
     'monster_sprite':
     pygame.image.load(
-        path.abspath('../advancing_hero/images/sprites/monster/frame1.png'))
+        path.abspath('../advancing_hero/images/sprites/monster/frame1.png')),
+    'potion_heal':
+    pygame.image.load(
+        path.abspath('../advancing_hero/images/sprites/potion_heal/red_potion.png'))
 }
 ###########################################################
 

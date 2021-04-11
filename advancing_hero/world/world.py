@@ -12,6 +12,7 @@ class World:
     Defines the state of the world in which
     our hero walks
     """
+
     def __init__(self, settings, level_data, screen) -> None:
         self.tile_list = []
         self.settings = settings
@@ -32,12 +33,14 @@ class World:
 
         self.sprites = {
             'bat_sprite': sprites.Bat,
-            'monster_sprite': sprites.Monster
+            'monster_sprite': sprites.Monster,
+            'potion_heal': sprites.PotionHeal
         }
 
         self.true_scroll = 0.0
         self.screen = screen
         self.frame_counter = 0
+        self.scroll_amount = 0
 
         for row_index, row_element in enumerate(self.stage_data):
             for column_index, tile in enumerate(row_element):
@@ -67,15 +70,24 @@ class World:
                 :param screen:
                 :param player:
         """
+        self.scroll_amount = 0
         self.scroll_world(screen, player)
 
         self.all_enemies.update(player, self)
         self.all_enemies.draw(self.screen)
 
+        if self.settings.DEBUG:
+            for sprite in self.all_enemies:
+                outline = sprite.mask.outline()
+                outline_image = pygame.Surface(sprite.rect.size).convert_alpha()
+                outline_image.fill((0, 0, 0, 0))
+                for point in outline:
+                    outline_image.set_at(point, (255, 0, 0))
+                self.screen.blit(outline_image, sprite.rect)
+
         self.frame_counter += 1
 
     def scroll_world(self, screen, player):
-        scroll = prev_scroll = 0
         if self.frame_counter % 2 == 0:
             prev_scroll = self.true_scroll
             if self.true_scroll <= (
@@ -83,23 +95,23 @@ class World:
                     self.settings.SCREEN_ROWS) * self.settings.tile_size:
                 self.true_scroll += self.settings.WORLD_SPEED
             scroll = int(self.true_scroll)
-            player.auto_scroll_down(scroll - prev_scroll)
+            self.scroll_amount = scroll - prev_scroll
+            player.auto_scroll_down(self.scroll_amount)
 
         for tile in self.tile_list:
             if self.frame_counter % 2 == 0:
-                tile[1].y += scroll - prev_scroll
+                tile[1].y += self.scroll_amount
             screen.blit(tile[0], tile[1])
             if self.settings.DEBUG:
                 pygame.draw.rect(screen, (255, 255, 255), tile[1], 2)
 
         # Check if we should spawn new sprites
         for _, sprite_element in enumerate(reversed(self.sprite_data)):
-            if sprite_element[
-                    2] <= self.settings.screen_height + self.true_scroll:
+            if sprite_element[2] <= self.settings.screen_height + self.true_scroll:
                 print(sprite_element)
                 new_sprite = self.sprites[sprite_element[0]](position=(
                     sprite_element[1], sprite_element[2] -
                     (self.settings.screen_height + self.true_scroll)),
-                                                             screen=screen)
+                    screen=screen)
                 self.all_enemies.add(new_sprite)
                 self.sprite_data.remove(sprite_element)
