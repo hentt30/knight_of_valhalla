@@ -61,6 +61,8 @@ class Player(Sprite):
         self.have_oxygen = True
         self.in_water = False
         self.alive = True
+        self.mask = pygame.mask.from_surface(self.image.convert_alpha())
+        self.invicibility_frames = 0
 
     def update(self):
         super().update()
@@ -76,6 +78,8 @@ class Player(Sprite):
         self.oxygen_bar.update()
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
+        if self.invicibility_frames > 0:
+            self.invicibility_frames -= 1
 
     def handle_breathing(self):
         for tile in self.stage.tile_list:
@@ -119,7 +123,7 @@ class Player(Sprite):
 
             if self.current_weapon == 'arrow' and self.attack_cooldown == 0 and len(
                     self.projectiles.sprites()) < 3:
-                self.attack_cooldown += 20
+                self.attack_cooldown += 15
                 self.weapon = weapons[self.current_weapon](
                     (self.rect.centerx - 4, self.rect.centery),
                     self.moving_direction, self.settings)
@@ -235,7 +239,10 @@ class Player(Sprite):
                                                    customType='end_game'))
 
     def draw(self):
-        self.screen.blit(self.image, self.rect)
+        surface_to_blit = self.image
+        if self.invicibility_frames > 0 and self.invicibility_frames % 2 == 0:
+            surface_to_blit = pygame.Surface([self.image.get_width(), self.image.get_height()], pygame.SRCALPHA)
+        self.screen.blit(surface_to_blit, self.rect)
         if self.settings.DEBUG:
             pygame.draw.rect(self.screen, (255, 0, 0), self.rect, 2)
 
@@ -263,7 +270,9 @@ class Player(Sprite):
         self.rect.y = temp_rect.y
 
     def hurt(self, damage):
-        self.current_health = max(self.current_health - damage, 0)
+        if self.invicibility_frames == 0:
+            self.current_health = max(self.current_health - damage, 0)
+            self.invicibility_frames = 60
         return True
 
     def heal(self, heal):

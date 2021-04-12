@@ -35,7 +35,8 @@ class World:
             'bat_sprite': sprites.Bat,
             'monster_sprite': sprites.Monster,
             'potion_heal': sprites.PotionHeal,
-            'ship_sprite': sprites.Ship
+            'ship_sprite': sprites.Ship,
+            'boss': sprites.Boss
         }
 
         self.true_scroll = 0.0

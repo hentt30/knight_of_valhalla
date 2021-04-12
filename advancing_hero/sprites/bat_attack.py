@@ -13,6 +13,7 @@ class BatAttack(Sprite):
         position,
         direction_angle,
         direction,
+        screen,
         max_health: float = 100,
         path: str = 'advancing_hero/images/sprites/bat_attack/',
     ) -> None:
@@ -27,14 +28,17 @@ class BatAttack(Sprite):
         self.rect = self.image.get_rect()
         self.speed = 5
         self.position = position
-        self.rect.x = position[0]
-        self.rect.y = position[1]
+        self.rect.centerx = position[0]
+        self.rect.centery = position[1]
         self.damage = 7
         self.music_path = os.path.abspath(
             'advancing_hero/songs/bat_attack.wav')
+        self.screen = screen
 
     def update(self, player, stage):
         super().update()
+        if self.rect.colliderect(self.screen.get_rect()) == 0:
+            self.kill()
         self.position[0] += self.speed * self.direction.x
         self.position[1] += self.speed * self.direction.y
         self.rect.x = self.position[0]
