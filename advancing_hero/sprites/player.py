@@ -23,7 +23,7 @@ class Player(Sprite):
         settings,
         stage,
         screen,
-        max_health: float = 100,
+        max_health: float = 1000,
         path: str = 'advancing_hero/images/sprites/player/',
     ) -> None:
         super().__init__(

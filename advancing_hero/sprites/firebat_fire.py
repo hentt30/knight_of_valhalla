@@ -4,46 +4,49 @@ import math
 import pygame
 
 
-class BatAttack(Sprite):
+class FirebatFire(Sprite):
     """
-    Represents a bat
+    Represents a firebat fire
     """
     def __init__(
         self,
         position,
-        direction_angle,
-        direction,
-        screen,
         max_health: float = 100,
-        path: str = 'advancing_hero/images/sprites/bat_attack/',
+        path: str = 'advancing_hero/images/sprites/fire/',
     ) -> None:
         super().__init__(path=os.path.abspath(path),
                          position=position,
                          max_health=max_health)
-        self.direction = direction
-        self.angle = direction_angle - math.pi / 2
-        self.image = pygame.transform.rotate(self.image,
-                                             180 * self.angle / math.pi)
         self.image = pygame.transform.scale2x(self.image)
         self.rect = self.image.get_rect()
         self.speed = 5
         self.position = position
         self.rect.centerx = position[0]
         self.rect.centery = position[1]
-        self.damage = 1
-        self.screen = screen
+        self.mask = pygame.mask.from_surface(self.image)
+        self.damage = 10
 
     def update(self, player, stage):
         super().update()
-        if self.rect.colliderect(self.screen.get_rect()) == 0:
+        if self.frame_counter >= 120:
             self.kill()
-        self.position[0] += self.speed * self.direction.x
-        self.position[1] += self.speed * self.direction.y
-        self.rect.x = self.position[0]
-        self.rect.y = self.position[1]
+        if self.frame_counter % 5 == 0:
+            self.image_frame = (self.image_frame + 1) % len(self.image_list)
+            self.update_image(self.image_frame)
         self.player_collision(player)
+
+    def update_image(self, index):
+        temp_rect = self.rect
+        self.image = self.image_list[index]
+        self.image = pygame.transform.scale2x(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = temp_rect.centerx
+        self.rect.centery = temp_rect.centery
 
     def player_collision(self, player):
         if self.rect.colliderect(player.rect):
             player.hurt(self.damage)
             self.kill()
+
+    def hurt(self, damage):
+        return False
