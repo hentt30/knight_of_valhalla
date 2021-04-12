@@ -24,15 +24,16 @@ class Ship(Sprite):
         self.attack_framerate = 180
         self.health_bar = HealthBar(screen=screen,
                                     parent_sprite=self,
-                                    offset=(0, -32))
+                                    offset=(0, -60))
         self.screen = screen
+        self.damage = 10
 
     def update(self, player, stage):
         super().update()
         if self.current_health <= 0 or self.rect.colliderect(
                 self.screen.get_rect()) == 0:
             self.kill()
-        self.rect.y += 1
+        self.rect.y += stage.scroll_amount
 
         temp_rect = self.rect
         self.image = self.image_list[0]
@@ -50,12 +51,12 @@ class Ship(Sprite):
             direction = pygame.math.Vector2.normalize(
                 pygame.Vector2((delta_x, delta_y)))
             position = [self.rect.centerx, self.rect.centery]
-            new_projectile = ShipAttack(position, direction_angle, direction)
+            new_projectile = ShipAttack(position, direction_angle, direction, screen=self.screen)
             self.groups()[0].add(new_projectile)
 
     def player_collision(self, player):
         if self.rect.colliderect(player.rect):
-            player.hurt(10)
+            player.hurt(self.damage)
             player.push()
 
     def hurt(self, damage):

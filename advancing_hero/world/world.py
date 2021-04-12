@@ -79,13 +79,14 @@ class World:
         self.all_enemies.draw(self.screen)
 
         if self.settings.DEBUG:
-            for sprite in self.all_enemies:
+            for sprite in self.all_enemies.sprites():
                 outline = sprite.mask.outline()
                 outline_image = pygame.Surface(sprite.rect.size).convert_alpha()
                 outline_image.fill((0, 0, 0, 0))
                 for point in outline:
                     outline_image.set_at(point, (255, 0, 0))
                 self.screen.blit(outline_image, sprite.rect)
+            print(len(self.all_enemies.sprites()))
 
         self.frame_counter += 1
 

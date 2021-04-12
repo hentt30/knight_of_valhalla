@@ -13,6 +13,7 @@ class ShipAttack(Sprite):
         position,
         direction_angle,
         direction,
+        screen,
         max_health: float = 100,
         path: str = 'advancing_hero/images/sprites/ship_attack/',
     ) -> None:
@@ -34,6 +35,7 @@ class ShipAttack(Sprite):
         self.explosion_frame = 2
         self.explosion_duration = 6
         self.music_path = os.path.abspath('advancing_hero/songs/explosion.wav')
+        self.screen = screen
 
     def update(self, player, stage):
         super().update()
@@ -48,11 +50,14 @@ class ShipAttack(Sprite):
         elif self.collide_player:
             self.play_music()
             self.kill()
+        if self.rect.colliderect(self.screen.get_rect()) == 0:
+            self.kill()
 
     def player_collision(self, player):
         if self.rect.colliderect(player.rect):
             self.collide_player = True
             self.image = self.image_list[-1]
+            player.hurt(self.damage)
 
     def play_music(self):
         sound = pygame.mixer.Sound(self.music_path)

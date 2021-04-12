@@ -5,7 +5,7 @@ import pickle
 from os import path
 import json
 ##### ENEMIES - ÚNICA PARTE EDITÁVEL DO CÓDIGO ###########
-enemy_name = 'ship_sprite'
+enemy_name = 'boss'
 enemies_available = {
     'bat_sprite':
     pygame.image.load(
@@ -19,7 +19,10 @@ enemies_available = {
             '../advancing_hero/images/sprites/potion_heal/red_potion.png')),
     'ship_sprite':
     pygame.image.load(
-        path.abspath('../advancing_hero/images/sprites/ship/frame1.png'))
+        path.abspath('../advancing_hero/images/sprites/ship/frame1.png')),
+    'boss':
+        pygame.image.load(
+            path.abspath('../advancing_hero/images/sprites/boss/a.png'))
 }
 ###########################################################
 
@@ -38,22 +41,22 @@ screen_width = tile_size * screen_cols
 screen_height = (tile_size * screen_rows)
 
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption('Enemie Level Editor')
+pygame.display.set_caption('Enemies Level Editor')
 
 #load images
 grass_img = pygame.image.load(
-    path.abspath('../advancing_hero/images/png/grass.png'))
+    path.abspath('../advancing_hero/images/blocks/grass.png'))
 
 dirt_img = pygame.image.load(
-    path.abspath('../advancing_hero/images/png/dirt.png'))
+    path.abspath('../advancing_hero/images/blocks/dirt.png'))
 water_img = pygame.image.load(
-    path.abspath('../advancing_hero/images/png/water.png'))
+    path.abspath('../advancing_hero/images/blocks/water.png'))
 
 brick_img = pygame.image.load(
-    path.abspath('../advancing_hero/images/png/brick.png'))
+    path.abspath('../advancing_hero/images/blocks/brick.png'))
 
 asphalt_img = pygame.image.load(
-    path.abspath('../advancing_hero/images/png/asphalt.png'))
+    path.abspath('../advancing_hero/images/blocks/asphalt.png'))
 
 #define game variables
 clicked = False

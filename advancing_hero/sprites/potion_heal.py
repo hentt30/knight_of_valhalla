@@ -17,17 +17,21 @@ class PotionHeal(Sprite):
         super().__init__(path=os.path.abspath(path), position=position)
 
         self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
         self.speed = 5
         self.position = position
         self.rect.x = position[0]
         self.rect.y = position[1]
         self.heal = 35
         self.music_path = os.path.abspath('advancing_hero/songs/item.wav')
+        self.screen = screen
 
     def update(self, player, stage):
         super().update()
         self.rect.y += stage.scroll_amount
         self.player_collision(player)
+        if self.rect.colliderect(self.screen.get_rect()) == 0:
+            self.kill()
         for tile in stage.tile_list:
             if tile[1].bottom > 0 and tile[
                     1].top < stage.settings.screen_height and tile[2].is_solid:

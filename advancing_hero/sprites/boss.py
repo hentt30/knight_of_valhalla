@@ -200,6 +200,7 @@ class Boss(Sprite):
                 self.counter1 = max(0.0, self.counter1 - 255/30)
                 self.timer1 -= 1
             else:
+                self.image.set_alpha(0)
                 self.substate = 1
                 self.timer1 = 30
                 self.counter1 = random.randint(8, 12)
@@ -255,6 +256,7 @@ class Boss(Sprite):
                 for tile in stage.tile_list:
                     tile[1].x = round(tile[1].x / 64) * 64
                 self.kill()
+                pygame.event.post(pygame.event.Event(pygame.USEREVENT, customType='win_game'))
 
     def shake_stage(self, stage):
         if self.frame_counter % 6 == 0:

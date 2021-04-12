@@ -29,7 +29,7 @@ class Boomerang(Sprite):
         self.acceleration = 0.2
         self.player = player
         self.state = 0
-        self.damage = 2.5
+        self.damage = 2
         self.settings = settings
 
     def update(self, stage):

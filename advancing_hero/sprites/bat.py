@@ -26,6 +26,7 @@ class Bat(Sprite):
                                     parent_sprite=self,
                                     offset=(0, -32))
         self.screen = screen
+        self.damage = 5
 
     def update(self, player, stage):
         super().update()
@@ -57,7 +58,7 @@ class Bat(Sprite):
 
     def player_collision(self, player):
         if self.rect.colliderect(player.rect):
-            player.hurt(0.001)
+            player.hurt(self.damage)
             player.push()
 
     def hurt(self, damage):

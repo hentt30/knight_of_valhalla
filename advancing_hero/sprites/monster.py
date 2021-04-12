@@ -26,6 +26,7 @@ class Monster(Sprite):
                                     parent_sprite=self,
                                     offset=(0, -32))
         self.screen = screen
+        self.damage = 10
 
     def update(self, player, stage):
         super().update()
@@ -58,12 +59,12 @@ class Monster(Sprite):
             position = [self.rect.centerx, self.rect.centery]
             new_projectile = MonsterAttack(
                 position, direction_angle, direction,
-                (player.rect.centerx, player.rect.centery))
+                (player.rect.centerx, player.rect.centery), self.screen)
             self.groups()[0].add(new_projectile)
 
     def player_collision(self, player):
         if self.rect.colliderect(player.rect):
-            player.hurt(0.001)
+            player.hurt(self.damage)
             player.push()
 
     def hurt(self, damage):

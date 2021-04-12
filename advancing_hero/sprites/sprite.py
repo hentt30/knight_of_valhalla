@@ -28,6 +28,7 @@ class Sprite(pygame.sprite.Sprite):
         self.frame_counter = 0
         self.max_health = max_health
         self.current_health = max_health
+        self.mask = pygame.mask.from_surface(self.image)
 
     def update(self, *args, **kwargs):
         self.frame_counter += 1

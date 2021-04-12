@@ -24,7 +24,7 @@ class Player(Sprite):
         settings,
         stage,
         screen,
-        max_health: float = 1000,
+        max_health: float = 100,
         max_oxygen: float = 100,
         path: str = 'advancing_hero/images/sprites/player/',
     ) -> None:
@@ -52,7 +52,7 @@ class Player(Sprite):
         self.alive = True
         self.health_bar = HealthBar(screen=screen,
                                     parent_sprite=self,
-                                    offset=(0, -32))
+                                    offset=(0, -38))
         self.oxygen_bar = OxygenBar(
             screen=screen,
             parent_sprite=self,
@@ -281,7 +281,7 @@ class Player(Sprite):
 
     def check_oxygen(self):
         if self.current_oxygen == 0:
-            self.hurt(1.1)
+            self.current_health = max(self.current_health - 0.5, 0)
 
     def check_alive(self):
         if self.current_health == 0:
@@ -290,6 +290,4 @@ class Player(Sprite):
                 pygame.event.Event(pygame.USEREVENT, customType='end_game'))
 
     def push(self):
-        self.rect.y += 5
-        if self.rect.bottom <= 0:
-            self.rect.y -= 5
+        pass

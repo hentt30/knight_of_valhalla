@@ -41,6 +41,8 @@ class BossSpear(Sprite):
         self.true_position = pygame.Vector2((self.rect.centerx, self.rect.centery))
         self.mask = pygame.mask.from_surface(self.image)
 
+        self.damage = 20
+
     def update(self, player, stage):
         super().update()
         self.image = pygame.transform.rotate(self.original_image, self.angle)
@@ -57,7 +59,7 @@ class BossSpear(Sprite):
 
     def player_collision(self, player):
         if pygame.sprite.collide_mask(self, player):
-            player.hurt(25)
+            player.hurt(self.damage)
 
     def set_position(self, x, y):
         self.true_position.x = x
