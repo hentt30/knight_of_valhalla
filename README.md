@@ -1,4 +1,4 @@
-*Advancing Hero*
+*Knight of Valhalla*
 ============================================
 
 Projeto de Ces-22
