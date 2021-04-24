@@ -19,6 +19,7 @@ BRICK = 'gray_rock'
 GRASS = 'grass'
 DIRT = 'sand'
 WATER = 'water'
+LAVA = 'lava'
 
 level_1 = 'advancing_hero/world/world.json'
 
@@ -29,4 +30,4 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
 ## DEBUG
-DEBUG = True
+DEBUG = False

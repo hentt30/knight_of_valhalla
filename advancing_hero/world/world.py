@@ -28,7 +28,8 @@ class World:
             2: blocks.Dirt,
             3: blocks.Water,
             4: blocks.Brick,
-            5: blocks.Asphalt
+            5: blocks.Asphalt,
+            6: blocks.Lava
         }
 
         self.sprites = {

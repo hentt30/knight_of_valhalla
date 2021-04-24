@@ -13,12 +13,15 @@ tile_size = 64
 screen_cols = 16
 screen_rows = 9
 cols = 16
-rows = 45
+rows = 111
 screen_width = tile_size * screen_cols
 screen_height = (tile_size * screen_rows)
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Level Editor')
+
+block_quantity=7
+block_type=0
 
 #load images
 grass_img = pygame.image.load(
@@ -34,6 +37,8 @@ brick_img = pygame.image.load(
 
 asphalt_img = pygame.image.load(
     path.abspath('../advancing_hero/images/blocks/asphalt.png'))
+lava_img = pygame.image.load(
+    path.abspath('../advancing_hero/images/blocks/lava.png'))
 
 #define game variables
 clicked = False
@@ -52,7 +57,7 @@ for row in range(rows):
     r = [0] * cols
     world_data.append(r)
 ## Load existant world
-with open('../advancing_hero/world/world.json') as world_file:
+with open('../scripts/world.json') as world_file:
     existant_world = json.load(world_file)
 aux = existant_world
 existant_world = existant_world['block_data']
@@ -114,6 +119,12 @@ def draw_world():
                 if world_data[rows - 1 - row - level][col] == 5:
                     #vertically moving platform
                     img = pygame.transform.scale(asphalt_img,
+                                                 (tile_size, tile_size))
+                    screen.blit(img, (col * tile_size,
+                                      (screen_rows - 1 - row) * tile_size))
+                if world_data[rows - 1 - row - level][col] == 6:
+                    # vertically moving platform
+                    img = pygame.transform.scale(lava_img,
                                                  (tile_size, tile_size))
                     screen.blit(img, (col * tile_size,
                                       (screen_rows - 1 - row) * tile_size))
@@ -186,13 +197,8 @@ while run:
             if x < cols and y1 < rows:
                 #update tile value
                 if pygame.mouse.get_pressed()[0] == 1:
-                    world_data[y1][x] += 1
-                    if world_data[y1][x] > 5:
-                        world_data[y1][x] = 0
-                elif pygame.mouse.get_pressed()[2] == 1:
-                    world_data[y1][x] -= 1
-                    if world_data[y1][x] < 0:
-                        world_data[y1][x] = 5
+                    world_data[y1][x] = block_type
+
         if event.type == pygame.MOUSEBUTTONUP:
             clicked = False
         #up and down key presses to change level number
@@ -201,6 +207,10 @@ while run:
                 level += 1
             elif event.key == pygame.K_DOWN and level > 0:
                 level -= 1
+            elif event.key == pygame.K_LEFT:
+                block_type = (block_type-1) % block_quantity
+            elif event.key == pygame.K_RIGHT:
+                block_type = (block_type + 1) % block_quantity
 
             #print(level)
 

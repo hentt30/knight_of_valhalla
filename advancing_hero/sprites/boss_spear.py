@@ -41,7 +41,7 @@ class BossSpear(Sprite):
         self.true_position = pygame.Vector2((self.rect.centerx, self.rect.centery))
         self.mask = pygame.mask.from_surface(self.image)
 
-        self.damage = 20
+        self.damage = 15
 
     def update(self, player, stage):
         super().update()

@@ -95,7 +95,7 @@ class Player(Sprite):
                                        self.rect.width, self.rect.height / 4):
                     tile[2].player_interaction(self)
         if self.in_water:
-            self.current_oxygen = max(self.current_oxygen - 1, 0)
+            self.current_oxygen = max(self.current_oxygen - 0.25, 0)
         else:
             self.current_oxygen = min(self.current_oxygen + 1, self.max_oxygen)
 

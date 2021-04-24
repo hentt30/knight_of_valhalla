@@ -5,7 +5,8 @@ import pickle
 from os import path
 import json
 ##### ENEMIES - ÚNICA PARTE EDITÁVEL DO CÓDIGO ###########
-enemy_name = 'boss'
+enemy_name = 'bat_sprite'
+enemy_list = ['bat_sprite', 'monster_sprite', 'ship_sprite', 'potion_heal', 'boss']
 enemies_available = {
     'bat_sprite':
     pygame.image.load(
@@ -36,7 +37,7 @@ tile_size = 64
 screen_cols = 16
 screen_rows = 9
 cols = 16
-rows = 45
+rows = 111
 screen_width = tile_size * screen_cols
 screen_height = (tile_size * screen_rows)
 
@@ -57,10 +58,13 @@ brick_img = pygame.image.load(
 
 asphalt_img = pygame.image.load(
     path.abspath('../advancing_hero/images/blocks/asphalt.png'))
+lava_img = pygame.image.load(
+    path.abspath('../advancing_hero/images/blocks/lava.png'))
 
 #define game variables
 clicked = False
 level = 0
+enemy_number=0
 
 #define colours
 white = (255, 255, 255)
@@ -76,7 +80,7 @@ for row in range(rows):
     world_data.append(r)
 ## Load existant world
 #./advancing_hero/world
-with open('../advancing_hero/world/world.json') as world_file:
+with open('../scripts/world.json') as world_file:
     existant_world = json.load(world_file)
 aux = existant_world
 enemies = existant_world['sprite_data']
@@ -139,6 +143,12 @@ def draw_world():
                 if world_data[rows - 1 - row - level][col] == 5:
                     #vertically moving platform
                     img = pygame.transform.scale(asphalt_img,
+                                                 (tile_size, tile_size))
+                    screen.blit(img, (col * tile_size,
+                                      (screen_rows - 1 - row) * tile_size))
+                if world_data[rows - 1 - row - level][col] == 6:
+                    # lava platform
+                    img = pygame.transform.scale(lava_img,
                                                  (tile_size, tile_size))
                     screen.blit(img, (col * tile_size,
                                       (screen_rows - 1 - row) * tile_size))
@@ -244,6 +254,12 @@ while run:
                 level += 1
             elif event.key == pygame.K_DOWN and level > 0:
                 level -= 1
+            elif event.key == pygame.K_LEFT:
+                enemy_number=(enemy_number-1) % len(enemy_list)
+                enemy_name=enemy_list[enemy_number]
+            elif event.key == pygame.K_RIGHT:
+                enemy_number = (enemy_number + 1) % len(enemy_list)
+                enemy_name = enemy_list[enemy_number]
 
     pygame.display.update()
 

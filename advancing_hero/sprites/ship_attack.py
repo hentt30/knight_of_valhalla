@@ -61,4 +61,5 @@ class ShipAttack(Sprite):
 
     def play_music(self):
         sound = pygame.mixer.Sound(self.music_path)
+        sound.set_volume(0.05)
         pygame.mixer.Channel(2).play(sound)

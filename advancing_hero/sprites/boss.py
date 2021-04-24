@@ -24,7 +24,7 @@ class Boss(Sprite):
                          max_health=max_health)
         self.screen = screen
         self.mask_list = []
-        self.damage = 25
+        self.damage = 20
 
         for i in range(len(self.image_list)):
             self.image_list[i] = \
