@@ -30,7 +30,7 @@ class BatAttack(Sprite):
         self.position = position
         self.rect.centerx = position[0]
         self.rect.centery = position[1]
-        self.damage = 5
+        self.damage = 4
         self.music_path = os.path.abspath(
             'advancing_hero/songs/bat_attack.wav')
         self.screen = screen
