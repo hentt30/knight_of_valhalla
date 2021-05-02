@@ -60,7 +60,8 @@ class Monster(Sprite):
             new_projectile = MonsterAttack(
                 position, direction_angle, direction,
                 (player.rect.centerx, player.rect.centery), self.screen)
-            self.groups()[0].add(new_projectile)
+            if(self.alive()):
+                self.groups()[0].add(new_projectile)
 
     def player_collision(self, player):
         if self.rect.colliderect(player.rect):
