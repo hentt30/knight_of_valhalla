@@ -66,3 +66,12 @@ exemplo é estritamente proibido.
 
   - A inspiração para o nome "Valhalla" vem da mitologia nórdica, onde os guerreiros mortos em combate são escolhidos por Odin e levados pelas valquírias para um salão enorme com 540 quartos, situados em Asgard. Lá eles são recepcionados aos outros guerreiros que brindam a sua chegada. É motivo de orgulho para os guerreiros vikings serem selecionados para Valhalla.
   ![Valhalla](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Walhalla_%281896%29_by_Max_Br%C3%BCckner.jpg/800px-Walhalla_%281896%29_by_Max_Br%C3%BCckner.jpg)
+
+## Referências 
+- Efeitos Sonoros retirados de: 
+    https://freesound.org/people/4barrelcarb/sounds/365378/ .
+
+- Sprites e Gráficos retirados de:
+-   https://kenney.nl/assets/roguelike-caves-dungeons ;
+-   https://kenney.nl/assets/rpg-base e https://www.spriters-resource.com/ ; e
+-   https://www.spriters-resource.com/ .
