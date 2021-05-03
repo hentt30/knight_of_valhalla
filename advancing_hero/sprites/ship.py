@@ -51,8 +51,12 @@ class Ship(Sprite):
             direction = pygame.math.Vector2.normalize(
                 pygame.Vector2((delta_x, delta_y)))
             position = [self.rect.centerx, self.rect.centery]
-            new_projectile = ShipAttack(position, direction_angle, direction, screen=self.screen)
-            self.groups()[0].add(new_projectile)
+            new_projectile = ShipAttack(position,
+                                        direction_angle,
+                                        direction,
+                                        screen=self.screen)
+            if self.alive():
+                self.groups()[0].add(new_projectile)
 
     def player_collision(self, player):
         if self.rect.colliderect(player.rect):
